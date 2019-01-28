@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">GeoQuiz</string>
+    <string name="map_questions">Map Questions</string>
+    <string name="geo_questions">Geo Questions</string>
+    <string name="exit">Exit</string>
+    <string name="welcome_to_geo_quiz">Welcome to Geo Quiz</string>
+    <string name="start">Start</string>
+    <string name="high_score">High score</string>
+
+    <string name="message_d_accuille">Message d\'accuille</string>
+    <string name="exitQuestion">Back</string>
+    <string name="high_score_for_questions_quiz">High score for quiz questions</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="confirmer_responseToQuestion">Confirmer</string>
+    <string name="aucune">Aucune</string>
+</resources>
