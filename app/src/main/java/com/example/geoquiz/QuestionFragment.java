@@ -4,12 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 
@@ -42,14 +46,11 @@ public class QuestionFragment extends Fragment {
     public TextView question_tv;
     DataBaseHelper dbHelper;
     Random randomQuestion = new Random();
-    Random randomPays = new Random();
-    Random randomPopulation = new Random();
-    Random randomDevise = new Random();
-    Random randomCapitale = new Random();
-    Random randomFlag = new Random();
-    Random randomMonument = new Random();
+
+    ArrayList<CountryInfo> questReponse;
+    RadioGroup radioGroup;
     RadioButton reponse1, reponse2, reponse3, reponse4, aucune;
-    int rowSize = 0;
+    int rowSize;
     String[] questions = {QUESTION_CAPITAL, QUESTION_DEVISE, QUESTION_PAYS, QUESTION_POPULATION, QUESTION_MONUMENT, QUESTION_FLAG};
     boolean question1;
     boolean question2;
@@ -57,6 +58,13 @@ public class QuestionFragment extends Fragment {
     boolean question4;
     boolean question5;
     boolean question6;
+    ArrayList<CountryInfo> arrayOfList;
+    int idReponse1, idReponse2, idReponse3, idReponse4, idQuestion;
+    CountryInfo quest;
+    CountryInfo ans1;
+    CountryInfo ans2;
+    CountryInfo ans3;
+    CountryInfo reponseTo;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -103,10 +111,13 @@ public class QuestionFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         dbHelper = new DataBaseHelper(getActivity());
-        View view = inflater.inflate(R.layout.fragment_question, container, false);
+        final View view = inflater.inflate(R.layout.fragment_question, container, false);
         question_tv = view.findViewById(R.id.tv_question);
+        //QuestionReponse questionReponse = new QuestionReponse();
 
-        rowSize = dbHelper.getRowCount();
+
+        rowSize = dbHelper.getAll().size();
+
 
         reponse1 = view.findViewById(R.id.radioButton_reponse1);
         reponse2 = view.findViewById(R.id.radioButton_reponse2);
@@ -114,12 +125,17 @@ public class QuestionFragment extends Fragment {
         reponse4 = view.findViewById(R.id.radioButton_reponse4);
         aucune = view.findViewById(R.id.radioButton_aucune);
 
+        getRandom();
+
         question_tv.setText(getRandQuestion());
+
         getRandResponse();
+
 
         // Inflate the layout for this fragment
         return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -142,13 +158,15 @@ public class QuestionFragment extends Fragment {
         mListener = null;
     }
 
+
     String getRandQuestion() {
         String theQuestion;
 
         switch (randomQuestion.nextInt(questions.length)) {
 
             case 0:
-                theQuestion = questions[0] + " " + getRandPays();
+                theQuestion = questions[0] + " " + quest.getPays();
+
 
                 question1 = true;
                 question2 = false;
@@ -156,9 +174,13 @@ public class QuestionFragment extends Fragment {
                 question4 = false;
                 question5 = false;
                 question6 = false;
+                //getRandIdPays();
                 break;
+
             case 1:
-                theQuestion = questions[1] + " " + getRandPays();
+
+
+                theQuestion = questions[1] + " " + quest.getPays();
 
                 question1 = false;
                 question2 = true;
@@ -166,19 +188,27 @@ public class QuestionFragment extends Fragment {
                 question4 = false;
                 question5 = false;
                 question6 = false;
+                //getRandIdPays();
                 break;
-            case 2:
-                theQuestion = questions[2] + " " + getRandPays();
 
+            case 2:
+                theQuestion = questions[2] + " " + quest.getPays();
+                reponse1.setText("PAYS&");
+                reponse2.setText("PAYQ2");
+                reponse3.setText("PAYS3");
+                reponse4.setText("PAYS4");
                 question1 = false;
                 question2 = false;
                 question3 = true;
                 question4 = false;
                 question5 = false;
                 question6 = false;
+                //getRandIdPays();
                 break;
+
             case 3:
-                theQuestion = questions[3] + " " + getRandPays();
+
+                theQuestion = questions[3] + " " + quest.getPays();
 
                 question1 = false;
                 question2 = false;
@@ -186,9 +216,13 @@ public class QuestionFragment extends Fragment {
                 question4 = true;
                 question5 = false;
                 question6 = false;
+                //getRandIdPays();
                 break;
+
             case 4:
-                theQuestion = questions[4] + " " + getRandMonument();
+
+
+                theQuestion = questions[4] + " " + quest.getMonument();
 
                 question1 = false;
                 question2 = false;
@@ -196,9 +230,13 @@ public class QuestionFragment extends Fragment {
                 question4 = false;
                 question5 = true;
                 question6 = false;
+                //getRandIdMonument();
                 break;
+
             case 5:
-                theQuestion = questions[5] + " " + getRandFlag();
+
+
+                theQuestion = questions[5] + " " + quest.getFlag();
 
                 question1 = false;
                 question2 = false;
@@ -206,7 +244,9 @@ public class QuestionFragment extends Fragment {
                 question4 = false;
                 question5 = false;
                 question6 = true;
+                // getRandIdFlag();
                 break;
+
             default:
                 theQuestion = " NULL";
                 reponse1.setText("NULLL");
@@ -217,92 +257,110 @@ public class QuestionFragment extends Fragment {
 
         }
 
-        return theQuestion.toUpperCase();
+        return theQuestion;
     }
 
     void getRandResponse() {
 
-        if (question1) {
-            reponse1.setText(getRandCapitale());
-            reponse2.setText(getRandCapitale());
-            reponse3.setText(getRandCapitale());
-            reponse4.setText(getRandCapitale());
-        } else if (question2) {
-            reponse1.setText(getRandDevise());
-            reponse2.setText(getRandDevise());
-            reponse3.setText(getRandDevise());
-            reponse4.setText(getRandDevise());
+        if (question1 && noDuplicate()) {
+            reponse1.setText(questReponse.get(0).getCapitale());
+            reponse2.setText(questReponse.get(1).getCapitale());
+            reponse3.setText(questReponse.get(2).getCapitale());
+            reponse4.setText(questReponse.get(3).getCapitale());
 
-        } else if (question3) {
+        } else if (question2 && noDuplicate()) {
+            reponse1.setText(questReponse.get(0).getDevise());
+            reponse2.setText(questReponse.get(1).getDevise());
+            reponse3.setText(questReponse.get(2).getDevise());
+            reponse4.setText(questReponse.get(3).getDevise());
+
+        } else if (question3 && noDuplicate()) {
             reponse1.setText("PAYS&");
             reponse2.setText("PAYQ2");
             reponse3.setText("PAYS3");
             reponse4.setText("PAYS4");
-        } else if (question4) {
-            reponse1.setText(getRandPopulation());
-            reponse2.setText(getRandPopulation());
-            reponse3.setText(getRandPopulation());
-            reponse4.setText(getRandPopulation());
 
-        } else if (question5) {
-            reponse1.setText(getRandMonument());
-            reponse2.setText(getRandMonument());
-            reponse3.setText(getRandMonument());
-            reponse4.setText(getRandMonument());
+        } else if (question4 && noDuplicate()) {
+            reponse1.setText(questReponse.get(0).getPopulation());
+            reponse2.setText(questReponse.get(1).getPopulation());
+            reponse3.setText(questReponse.get(2).getPopulation());
+            reponse4.setText(questReponse.get(3).getPopulation());
 
-        } else if (question6) {
-            reponse1.setText(getRandFlag());
-            reponse2.setText(getRandFlag());
-            reponse3.setText(getRandFlag());
-            reponse4.setText(getRandFlag());
+        } else if (question5 && noDuplicate()) {
+            reponse1.setText(questReponse.get(0).getMonument());
+            reponse2.setText(questReponse.get(1).getMonument());
+            reponse3.setText(questReponse.get(2).getMonument());
+            reponse4.setText(questReponse.get(3).getMonument());
 
+        } else if (question6 && noDuplicate()) {
+            reponse1.setText(questReponse.get(0).getFlag());
+            reponse2.setText(questReponse.get(1).getFlag());
+            reponse3.setText(questReponse.get(2).getFlag());
+            reponse4.setText(questReponse.get(3).getFlag());
         }
 
     }
 
 
-    String getRandPays() {
-
-        return dbHelper.getAll().get(randomPays.nextInt(rowSize)).getPays().toUpperCase();
+    boolean noDuplicate() {
+        return ans1.getId() != ans2.getId()
+                & ans1.getId() != ans3.getId()
+                & ans1.getId() != reponseTo.getId()
+                & ans2.getId() != ans3.getId()
+                & ans2.getId() != reponseTo.getId()
+                & ans3.getId() != reponseTo.getId()
+                && !ans1.equals(ans2)
+                && !ans1.equals(ans3)
+                && !ans1.equals(reponseTo)
+                && !ans2.equals(ans3)
+                && !ans2.equals(reponseTo)
+                && !ans3.equals(reponseTo);
     }
 
-    String getRandCapitale() {
+    public void getRandom() {
 
-        return dbHelper.getAll().get(randomCapitale.nextInt(rowSize)).getCapitale().toUpperCase();
-    }
+        Random rnd = new Random();
 
-    String getRandDevise() {
 
-        return dbHelper.getAll().get(randomDevise.nextInt(rowSize)).getDevise().toUpperCase();
-    }
+        quest = dbHelper.getAll().get(rnd.nextInt(rowSize));
+        ans1 = dbHelper.getAll().get(rnd.nextInt(rowSize));
+        ans2 = dbHelper.getAll().get(rnd.nextInt(rowSize));
+        ans3 = dbHelper.getAll().get(rnd.nextInt(rowSize));
+        reponseTo = quest;
 
-    String getRandPopulation() {
-        return dbHelper.getAll().get(randomPopulation.nextInt(rowSize)).getPopulation().toUpperCase();
-    }
 
-    String getRandFlag() {
 
-        return dbHelper.getAll().get(randomFlag.nextInt(rowSize)).getFlag().toUpperCase();
-    }
+            questReponse = new ArrayList<>();
+            questReponse.add(ans1);
+            questReponse.add(ans2);
+            questReponse.add(ans3);
+            questReponse.add(reponseTo);
 
-    String getRandMonument() {
-        return dbHelper.getAll().get(randomMonument.nextInt(rowSize)).getMonument();
+        Collections.shuffle(questReponse);
+        Log.i("sd", "onCreateView: " + questReponse + " \n " + questReponse.size());
+
     }
 
     public void setTextView(String text) {
         question_tv.setText(text);
     }
 
-    public void setTextToRadio(String reponseOne, String reponseTwo, String reponseThree, String reponseFour) {
-        reponse1.setText(reponseOne);
-        reponse2.setText(reponseTwo);
-        reponse3.setText(reponseThree);
-        reponse4.setText(reponseFour);
-
+    // TODO: 28/01/19
+    public boolean checkRepone() {
+        Log.i("dsds", "checkRepone: " + idQuestion + "  " + idReponse1 + "   " + idReponse2 + "  " + idReponse3 + "   " + idReponse4);
+        if (idQuestion == idReponse1) {
+            return true;
+        } else if (idQuestion == idReponse2) {
+            return true;
+        } else if (idQuestion == idReponse3) {
+            return true;
+        } else return idQuestion == idReponse4;
     }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
 }

@@ -43,7 +43,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private Context context;
 
-    ArrayList<CountryInfo> country;
+        ArrayList<CountryInfo> country;
     public DataBaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
@@ -164,13 +164,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
         public int getRowCount( ) {
-            String countQuery = "SELECT  * FROM " + TABLE_NAME;
-            SQLiteDatabase db = this.getReadableDatabase();
-            Cursor cursor = db.rawQuery(countQuery, null);
-            int count = cursor.getCount();
-            Log.i(TAG, "getRowCount: "+count);
-            cursor.close();
-            return count;
+
+            return country.size();
         }
 
 
