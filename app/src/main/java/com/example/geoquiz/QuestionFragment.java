@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,6 +69,8 @@ public class QuestionFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private  RadioButton radioSelected;
     private OnFragmentInteractionListener mListener;
     private QuestionActivity questionActivity;
 
@@ -115,18 +118,10 @@ public class QuestionFragment extends Fragment {
         question_tv = view.findViewById(R.id.tv_question);
         //QuestionReponse questionReponse = new QuestionReponse();
 
-
         rowSize = dbHelper.getAll().size();
-
-
-        reponse1 = view.findViewById(R.id.radioButton_reponse1);
-        reponse2 = view.findViewById(R.id.radioButton_reponse2);
-        reponse3 = view.findViewById(R.id.radioButton_reponse3);
-        reponse4 = view.findViewById(R.id.radioButton_reponse4);
-        aucune = view.findViewById(R.id.radioButton_aucune);
-
+        addListnerRadio(view);
+        //addListnerRadio(view);
         getRandom();
-
         question_tv.setText(getRandQuestion());
 
         getRandResponse();
@@ -158,13 +153,14 @@ public class QuestionFragment extends Fragment {
         mListener = null;
     }
 
-
+    String correctAnswer="";
     String getRandQuestion() {
         String theQuestion;
 
         switch (randomQuestion.nextInt(questions.length)) {
 
-            case 0:
+            case 0: // Questions pour les capitales
+                 correctAnswer = quest.getCapitale();
                 theQuestion = questions[0] + " " + quest.getPays();
 
 
@@ -177,8 +173,8 @@ public class QuestionFragment extends Fragment {
                 //getRandIdPays();
                 break;
 
-            case 1:
-
+            case 1://Question pour les devises
+                correctAnswer = quest.getDevise();
 
                 theQuestion = questions[1] + " " + quest.getPays();
 
@@ -188,10 +184,10 @@ public class QuestionFragment extends Fragment {
                 question4 = false;
                 question5 = false;
                 question6 = false;
-                //getRandIdPays();
+
                 break;
 
-            case 2:
+            case 2: // Question
                 theQuestion = questions[2] + " " + quest.getPays();
                 reponse1.setText("PAYS&");
                 reponse2.setText("PAYQ2");
@@ -206,8 +202,8 @@ public class QuestionFragment extends Fragment {
                 //getRandIdPays();
                 break;
 
-            case 3:
-
+            case 3: // Question pour le nombre de population
+                correctAnswer= quest.getPopulation();
                 theQuestion = questions[3] + " " + quest.getPays();
 
                 question1 = false;
@@ -219,9 +215,9 @@ public class QuestionFragment extends Fragment {
                 //getRandIdPays();
                 break;
 
-            case 4:
+            case 4:// Question pour les monument
 
-
+                correctAnswer= quest.getMonument();
                 theQuestion = questions[4] + " " + quest.getMonument();
 
                 question1 = false;
@@ -233,9 +229,9 @@ public class QuestionFragment extends Fragment {
                 //getRandIdMonument();
                 break;
 
-            case 5:
+            case 5: // Question pour ls flag
 
-
+                correctAnswer = quest.getFlag();
                 theQuestion = questions[5] + " " + quest.getFlag();
 
                 question1 = false;
@@ -267,6 +263,7 @@ public class QuestionFragment extends Fragment {
             reponse2.setText(questReponse.get(1).getCapitale());
             reponse3.setText(questReponse.get(2).getCapitale());
             reponse4.setText(questReponse.get(3).getCapitale());
+
 
         } else if (question2 && noDuplicate()) {
             reponse1.setText(questReponse.get(0).getDevise());
@@ -361,6 +358,38 @@ public class QuestionFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+     public void addListnerRadio( View view) {
+
+         radioGroup = view.findViewById(R.id.radioGroupe);
+         reponse1 = view.findViewById(R.id.radioButton_reponse1);
+         reponse2 = view.findViewById(R.id.radioButton_reponse2);
+         reponse3 = view.findViewById(R.id.radioButton_reponse3);
+         reponse4 = view.findViewById(R.id.radioButton_reponse4);
+         aucune = view.findViewById(R.id.radioButton_aucune);
+
+         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+             @Override
+             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                 switch (checkedId) {
+                     case R.id.radioButton_reponse1:
+                         Toast.makeText(getContext(), reponse1.getText(), Toast.LENGTH_SHORT).show();
+                         break;
+                     case R.id.radioButton_reponse2:
+                         Toast.makeText(getContext(), reponse2.getText(), Toast.LENGTH_SHORT).show();
+                         break;
+                     case R.id.radioButton_reponse3:
+                         Toast.makeText(getContext(), reponse3.getText(), Toast.LENGTH_SHORT).show();
+                         break;
+                     case R.id.radioButton_reponse4:
+                         Toast.makeText(getContext(), reponse4.getText(), Toast.LENGTH_SHORT).show();
+                         break;
+                 }
+             }
+         });
 
 
-}
+     }
+     }
+
+
+

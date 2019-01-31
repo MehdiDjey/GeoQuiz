@@ -28,6 +28,7 @@ public class StartQuestionActivity extends AppCompatActivity {
         frag.setTextView(frag.getRandQuestion());
         frag.getRandResponse();
         frag.getRandom();
+        //frag.addListnerRadio(view);
         if (frag.checkRepone()) {
             myScore++;
             score.setText(""+myScore);
