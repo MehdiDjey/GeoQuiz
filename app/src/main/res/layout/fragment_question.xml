@@ -28,7 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@null"
-            android:padding="15dp"
+            android:layout_weight="1"
+
             android:text=""
             android:textSize="24sp" />
 
@@ -36,7 +37,8 @@
             android:id="@+id/radioButton_reponse2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"
+
+            android:layout_weight="1"
             android:text=""
             android:button="@null"
             android:textSize="24sp" />
@@ -45,8 +47,9 @@
             android:id="@+id/radioButton_reponse3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"
+
             android:text=""
+            android:layout_weight="1"
             android:button="@null"
             android:textSize="24sp" />
 
@@ -54,7 +57,8 @@
             android:id="@+id/radioButton_reponse4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"
+
+            android:layout_weight="1"
             android:text=""
             android:button="@null"
             android:textSize="24sp" />
