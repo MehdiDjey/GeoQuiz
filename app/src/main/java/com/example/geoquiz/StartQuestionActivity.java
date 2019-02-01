@@ -23,17 +23,4 @@ public class StartQuestionActivity extends AppCompatActivity {
          frag= (QuestionFragment) getSupportFragmentManager().findFragmentById(R.id.fragment2);
     }
 
-    public void onConfirm(View view) {
-
-        frag.setTextView(frag.getRandQuestion());
-        frag.getRandResponse();
-        frag.getRandom();
-        //frag.addListnerRadio(view);
-        if (frag.checkRepone()) {
-            myScore++;
-            score.setText(""+myScore);
-        }
-
-
-    }
 }

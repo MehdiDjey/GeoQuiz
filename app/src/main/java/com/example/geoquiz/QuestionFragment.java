@@ -1,8 +1,12 @@
 package com.example.geoquiz;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -70,7 +74,11 @@ public class QuestionFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private  RadioButton radioSelected;
+    int score;
+
+    String getReponse1, getReponse2, getReponse3, getReponse4;
+
+    private RadioButton radioSelected;
     private OnFragmentInteractionListener mListener;
     private QuestionActivity questionActivity;
 
@@ -153,14 +161,15 @@ public class QuestionFragment extends Fragment {
         mListener = null;
     }
 
-    String correctAnswer="";
+    String correctAnswer;
+
     String getRandQuestion() {
         String theQuestion;
 
         switch (randomQuestion.nextInt(questions.length)) {
 
             case 0: // Questions pour les capitales
-                 correctAnswer = quest.getCapitale();
+                correctAnswer = quest.getCapitale();
                 theQuestion = questions[0] + " " + quest.getPays();
 
 
@@ -203,7 +212,7 @@ public class QuestionFragment extends Fragment {
                 break;
 
             case 3: // Question pour le nombre de population
-                correctAnswer= quest.getPopulation();
+                correctAnswer = quest.getPopulation();
                 theQuestion = questions[3] + " " + quest.getPays();
 
                 question1 = false;
@@ -217,7 +226,7 @@ public class QuestionFragment extends Fragment {
 
             case 4:// Question pour les monument
 
-                correctAnswer= quest.getMonument();
+                correctAnswer = quest.getMonument();
                 theQuestion = questions[4] + " " + quest.getMonument();
 
                 question1 = false;
@@ -252,6 +261,7 @@ public class QuestionFragment extends Fragment {
                 break;
 
         }
+        Log.i("tag", "getRandQuestion: " + correctAnswer);
 
         return theQuestion;
     }
@@ -326,12 +336,11 @@ public class QuestionFragment extends Fragment {
         reponseTo = quest;
 
 
-
-            questReponse = new ArrayList<>();
-            questReponse.add(ans1);
-            questReponse.add(ans2);
-            questReponse.add(ans3);
-            questReponse.add(reponseTo);
+        questReponse = new ArrayList<>();
+        questReponse.add(ans1);
+        questReponse.add(ans2);
+        questReponse.add(ans3);
+        questReponse.add(reponseTo);
 
         Collections.shuffle(questReponse);
         Log.i("sd", "onCreateView: " + questReponse + " \n " + questReponse.size());
@@ -358,38 +367,108 @@ public class QuestionFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-     public void addListnerRadio( View view) {
+    boolean isNewQuestion;
+    public void addListnerRadio(View view) {
 
-         radioGroup = view.findViewById(R.id.radioGroupe);
-         reponse1 = view.findViewById(R.id.radioButton_reponse1);
-         reponse2 = view.findViewById(R.id.radioButton_reponse2);
-         reponse3 = view.findViewById(R.id.radioButton_reponse3);
-         reponse4 = view.findViewById(R.id.radioButton_reponse4);
-         aucune = view.findViewById(R.id.radioButton_aucune);
+        radioGroup = view.findViewById(R.id.radioGroupe);
+        reponse1 = view.findViewById(R.id.radioButton_reponse1);
+        reponse2 = view.findViewById(R.id.radioButton_reponse2);
+        reponse3 = view.findViewById(R.id.radioButton_reponse3);
+        reponse4 = view.findViewById(R.id.radioButton_reponse4);
 
-         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-             @Override
-             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                 switch (checkedId) {
-                     case R.id.radioButton_reponse1:
-                         Toast.makeText(getContext(), reponse1.getText(), Toast.LENGTH_SHORT).show();
-                         break;
-                     case R.id.radioButton_reponse2:
-                         Toast.makeText(getContext(), reponse2.getText(), Toast.LENGTH_SHORT).show();
-                         break;
-                     case R.id.radioButton_reponse3:
-                         Toast.makeText(getContext(), reponse3.getText(), Toast.LENGTH_SHORT).show();
-                         break;
-                     case R.id.radioButton_reponse4:
-                         Toast.makeText(getContext(), reponse4.getText(), Toast.LENGTH_SHORT).show();
-                         break;
-                 }
-             }
-         });
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                reset();
+                switch (checkedId) {
+
+                    case R.id.radioButton_reponse1:
+                        getReponse1 = reponse1.getText().toString();
+                        if (getReponse1.equals(correctAnswer)) {
+                            score++;
+                            reponse1.setTextColor(getResources().getColor(R.color.green));
+                        } else {
+                            reponse1.setTextColor(getResources().getColor(R.color.red));
+                        }
+                        Toast.makeText(getContext(), reponse1.getText(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.radioButton_reponse2:
+                        getReponse2 = reponse2.getText().toString();
+                        if (getReponse2.equals(correctAnswer)) {
+                            score++;
+                            reponse2.setTextColor(getResources().getColor(R.color.green));
+                        } else {
+                            reponse2.setTextColor(getResources().getColor(R.color.red));
+                        }
+                        Toast.makeText(getContext(), reponse2.getText(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.radioButton_reponse3:
+                        getReponse3 = reponse3.getText().toString();
+                        if (getReponse3.equals(correctAnswer)) {
+                            score++;
+                            reponse3.setTextColor(getResources().getColor(R.color.green));
+                        } else {
+                            reponse3.setTextColor(getResources().getColor(R.color.red));
+                        }
+                        Toast.makeText(getContext(), reponse3.getText(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.radioButton_reponse4:
+                        getReponse4 = reponse4.getText().toString();
+                        if (getReponse4.equals(correctAnswer)) {
+                            score++;
+                            reponse4.setTextColor(getResources().getColor(R.color.green));
+                        } else {
+                            reponse4.setTextColor(getResources().getColor(R.color.red));
+                        }
+                        Toast.makeText(getContext(), reponse4.getText(), Toast.LENGTH_SHORT).show();
+                        break;
+
+                }
+
+                Log.i("tag", "addListnerRadio: " + getReponse1 + " " + getReponse2 + "  " + getReponse3 + "  " + getReponse4);
+                Log.i("tag", "addListnerRadio:Score  " + score);
+            }
 
 
-     }
-     }
+
+
+
+
+        });
+
+
+    }
+
+    public  void reset() {
+        reponse1.setChecked(false);
+        reponse2.setChecked(false);
+        reponse3.setChecked(false);
+        reponse4.setChecked(false);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+
+                setTextView(getRandQuestion());
+                getRandResponse();
+                getRandom();
+                reponse1.setTextColor(Color.BLACK);
+                reponse2.setTextColor(Color.BLACK);
+                reponse3.setTextColor(Color.BLACK);
+                reponse4.setTextColor(Color.BLACK);
+
+
+
+            }
+
+
+        }, 2000);
+
+    }
+
+
+}
+
 
 
 

@@ -13,22 +13,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Mon fragmeent"
-        android:textSize="24dp" />
+        android:textColor="@color/black"
+        android:text="@string/mon_fragmeent"
+        android:textSize="24sp" />
 
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/radioGroupe"
-        android:gravity="center">
+        android:gravity="center_horizontal">
 
         <RadioButton
             android:id="@+id/radioButton_reponse1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:button="@null"
             android:padding="15dp"
             android:text=""
-            android:textSize="24dp" />
+            android:textSize="24sp" />
 
         <RadioButton
             android:id="@+id/radioButton_reponse2"
@@ -36,7 +38,8 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:text=""
-            android:textSize="24dp" />
+            android:button="@null"
+            android:textSize="24sp" />
 
         <RadioButton
             android:id="@+id/radioButton_reponse3"
@@ -44,8 +47,8 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:text=""
-
-            android:textSize="24dp" />
+            android:button="@null"
+            android:textSize="24sp" />
 
         <RadioButton
             android:id="@+id/radioButton_reponse4"
@@ -53,16 +56,8 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:text=""
-            android:textSize="24dp" />
-
-        <RadioButton
-            android:id="@+id/radioButton_aucune"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:text="@string/aucune"
-
-            android:textSize="24dp" />
+            android:button="@null"
+            android:textSize="24sp" />
 
     </RadioGroup>
 
