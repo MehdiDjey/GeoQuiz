@@ -249,7 +249,7 @@ public class QuestionFragment extends Fragment {
                 question4 = false;
                 question5 = false;
                 question6 = true;
-                // getRandIdFlag();
+
                 break;
 
             default:
@@ -300,6 +300,8 @@ public class QuestionFragment extends Fragment {
             reponse4.setText(questReponse.get(3).getMonument());
 
         } else if (question6 && noDuplicate()) {
+            String ressourceImage=  questReponse.get(0).getFlag()+".png";
+            reponse1.setButtonDrawable(R.drawable.flag_alger);
             reponse1.setText(questReponse.get(0).getFlag());
             reponse2.setText(questReponse.get(1).getFlag());
             reponse3.setText(questReponse.get(2).getFlag());
@@ -327,14 +329,11 @@ public class QuestionFragment extends Fragment {
     public void getRandom() {
 
         Random rnd = new Random();
-
-
         quest = dbHelper.getAll().get(rnd.nextInt(rowSize));
         ans1 = dbHelper.getAll().get(rnd.nextInt(rowSize));
         ans2 = dbHelper.getAll().get(rnd.nextInt(rowSize));
         ans3 = dbHelper.getAll().get(rnd.nextInt(rowSize));
         reponseTo = quest;
-
 
         questReponse = new ArrayList<>();
         questReponse.add(ans1);
@@ -428,15 +427,7 @@ public class QuestionFragment extends Fragment {
                 Log.i("tag", "addListnerRadio: " + getReponse1 + " " + getReponse2 + "  " + getReponse3 + "  " + getReponse4);
                 Log.i("tag", "addListnerRadio:Score  " + score);
             }
-
-
-
-
-
-
         });
-
-
     }
 
     public  void reset() {
@@ -456,17 +447,9 @@ public class QuestionFragment extends Fragment {
                 reponse2.setTextColor(Color.BLACK);
                 reponse3.setTextColor(Color.BLACK);
                 reponse4.setTextColor(Color.BLACK);
-
-
-
             }
-
-
-        }, 2000);
-
+            }, 2000);
     }
-
-
 }
 
 

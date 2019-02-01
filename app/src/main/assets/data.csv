@@ -2,29 +2,29 @@ Cuba       ,La Havane      ,11.116 millions ,Peso   ,monu_cuba   				,flag_cuba
 Finlande   ,Helsinki       ,5.522 millions  ,Euro   ,monu_finland				,flag_finlande
 Maroc      ,Rabat          ,34.314 millions ,Dirham ,monu_maroc     	,flag_maroc
 Japon      ,Tokyo          ,126.168 millions,Yen    ,monu_japon      ,flag_japon
-Pays-Bas   ,Amsterdame     ,34.314 millions ,Dirham ,monu_paysbas    ,flag_maroc
-Grece      ,Athènes        ,126.168 millions,Yen    ,monu_grece      ,flag_japon
+Pays-Bas   ,Amsterdame     ,34.314 millions ,Dirham ,monu_paysbas    ,flag_paysbas
+Grece      ,Athènes        ,126.168 millions,Yen    ,monu_grece      ,flag_grece
 Algerie    ,Alger          ,41.32 millions  ,Dinars ,monu_alger      ,flag_alger
 France   		,Paris          ,67.12 millions  ,Euro   ,monu_france     ,flag_france
 Bulgarie   ,Sofia          ,7.101 millions  ,Lev    ,monu_ bulgarie  ,flag_bulgarie
-États-Unis ,Washington D.C.,327.167 million ,Dollars,monu_USA_       ,flag_USA
+États-Unis ,Washington D.C.,327.167 million ,Dollars,monu_USA_       ,flag_usa
 Australie  ,Canberra       ,23.470 millions ,Dollar ,monu_australie  ,flag_australie
 Belgique   ,Bruxelles      ,11.358 millions ,Euro   ,monu_Belgique   ,flag_belgique
 Qatar      ,Doha           ,2.314  millions ,Riyal  ,mon_qatar       ,flag_qatar
 Zimbabwe   ,Harare         ,13.805 millions ,Dollar ,monu_Zimba      ,flag_zimba
-Indonésie  ,Jakarta        ,262.787 millions,Roupie ,monu_Indoné     ,flag_indoné
+Indonésie  ,Jakarta        ,262.787 millions,Roupie ,monu_Indoné     ,flag_indoni
 Jamaïque   ,Kingston       ,2.990 millions  ,Dollar ,monu_jamaique   ,flag_jamaique
 Malaisie   ,Kuala Lumpur   ,31.809 millions ,Ringgit,monu_malaisie   ,flag_malaisie
 Maldives   ,Malé           ,392 709         ,Rufiyaa,monu_maldive    ,flag_maldive
 Inde       ,New Delhi      ,1.296 million   ,Roupie ,monu_Inde       ,flag_inde
 Chine      ,Pékin          ,1.415 millard   ,yuan   ,monu_chine      ,flag_chine
-Saint-Marin,Saint-Marin    ,32 793          ,Euro   ,monu_saintMarin ,flag_saintMarin
+Saint-Marin,Saint-Marin    ,32 793          ,Euro   ,monu_saintMarin ,flag_saintmarin
 Fidji      ,Suva           ,909 389         ,Dollar ,monu_fidji      ,flag_fidji
-Laos       ,Vientiane      ,7.234 millions  ,Kip    ,monu_Laos       ,flag_Loas
+Laos       ,Vientiane      ,7.234 millions  ,Kip    ,monu_Laos       ,flag_loas
 Haïti      ,Port-au-Prince ,11.646 millions ,Gourde ,monu_haiti      ,flag_haiti
 Panama     ,Panama         ,3.753 millions  ,Balboa ,monu_pana       ,flag_panama
-Bahreïn    ,Manama         ,1.346 millions  ,Dinar  ,monu_Bahrein    ,flag_Bahrein
-Royaume-Uni,Londres        ,65.105 millions ,Livre  ,monu_UK         ,flag_UK
-Pakistan   ,Islamabad      ,207.774 millions,Roupie ,monu_PakPak     ,falg_PakPak
-Irlande    ,Dublin         ,5.068 millions  ,Euro   ,monuIrlande     ,flag_Irlande
+Bahreïn    ,Manama         ,1.346 millions  ,Dinar  ,monu_Bahrein    ,flag_bahrein
+Royaume-Uni,Londres        ,65.105 millions ,Livre  ,monu_UK         ,flag_uk
+Pakistan   ,Islamabad      ,207.774 millions,Roupie ,monu_PakPak     ,falg_pakistan
+Irlande    ,Dublin         ,5.068 millions  ,Euro   ,monuIrlande     ,flag_irlande
 Vatican    ,Cité du Vatican,921             ,Euro   ,monu_vatican    ,flag_vatican
