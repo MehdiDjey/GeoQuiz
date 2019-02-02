@@ -27,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_0"
+            android:layout_weight="1"
             android:textSize="24sp" />
 
         <TextView
@@ -37,13 +38,6 @@
             android:text="@string/timer"
             android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/nbr_question_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/numquestion"
-            android:textSize="24sp" />
 
     </LinearLayout>
 

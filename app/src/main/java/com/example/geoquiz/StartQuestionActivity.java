@@ -1,14 +1,19 @@
 package com.example.geoquiz;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -50,19 +55,27 @@ public class StartQuestionActivity extends AppCompatActivity {
     CountryInfo reponseTo;
     TextView score_tv;
     TextView timer;
-    int myScore=0;
+    int myScore = 0;
     String correctAnswer;
     QuestionFragment frag;
+    private static final long START_TIME_IN_MILLIS = 600000;
+    private CountDownTimer mCountDownTimer;
+
+    private boolean mTimerRunning;
+    String playerName;
+    private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
+    private long mEndTime;
 
 
     int score;
     String getReponse1, getReponse2, getReponse3, getReponse4;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_question);
         dbHelper = new DataBaseHelper(this);
-        timer= findViewById(R.id.timer_tv);
+        timer = findViewById(R.id.timer_tv);
         score_tv = findViewById(R.id.tv_score_question);
         question_tv = findViewById(R.id.tv_question);
         rowSize = dbHelper.getAll().size();
@@ -74,6 +87,7 @@ public class StartQuestionActivity extends AppCompatActivity {
         getRandom();
         getRandQuestion();
         getRandResponse();
+        startTimer();
 
     }
 
@@ -158,7 +172,7 @@ public class StartQuestionActivity extends AppCompatActivity {
             case 5: // Question pour ls flag
 
                 correctAnswer = quest.getPays();
-                theQuestion = questions[5]+" "+quest.getFlag();
+                theQuestion = questions[5] + " " + quest.getFlag();
  /*               question_tv.setTransformationMethod(null);
                 SpannableStringBuilder ssb = new SpannableStringBuilder(theQuestion);
                 ssb.setSpan(new ImageSpan(context, getIdRessource(quest.getFlag()), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);*/
@@ -230,7 +244,6 @@ public class StartQuestionActivity extends AppCompatActivity {
             reponse2.setText(questReponse.get(1).getPays());
             reponse3.setText(questReponse.get(2).getFlag());
             reponse4.setText(questReponse.get(3).getFlag());
-
 
 
         } else if (question4 && noDuplicate()) {
@@ -357,7 +370,7 @@ public class StartQuestionActivity extends AppCompatActivity {
         });
     }
 
-    public  void reset() {
+    public void reset() {
         reponse1.setChecked(false);
         reponse2.setChecked(false);
         reponse3.setChecked(false);
@@ -380,5 +393,65 @@ public class StartQuestionActivity extends AppCompatActivity {
                 reponse4.setButtonDrawable(null);
             }
         }, 2000);
+    }
+
+    boolean isRunning = false;
+    CountDownTimer countDownTimer;
+
+    private void startTimer() {
+        countDownTimer = new CountDownTimer(60 * 1000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                isRunning = true;
+                timer.setText("Temps restant: " + millisUntilFinished / 1000);
+
+            }
+
+            public void onFinish() {
+                isRunning = false;
+                showInputDialog();
+
+                timer.setText("Fin du jeu");
+            }
+        };
+
+
+        if (isRunning) {
+            countDownTimer.cancel();
+        } else {
+            countDownTimer.start();
+        }
+    }
+
+
+    protected void showInputDialog() {
+
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(StartQuestionActivity.this);
+        View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(StartQuestionActivity.this);
+        alertDialogBuilder.setView(promptView);
+
+        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        //resultText.setText("Hello, " + editText.getText());
+                        playerName = editText.getText().toString();
+                        Intent back = new Intent(StartQuestionActivity.this, QuestionActivity.class);
+                        startActivity(back);
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 }
