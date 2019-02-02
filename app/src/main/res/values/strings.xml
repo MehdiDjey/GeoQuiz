@@ -20,4 +20,9 @@
     <string name="timer">Temps restant:</string>
     <string name="_0">0</string>
     <string name="score">Score :</string>
+
+    <string name="add">Saving Score</string>
+    <string name="get">Scores List</string>
+    <string name="name">Player Name</string>
+    <string name="list_header">listHead</string>
 </resources>

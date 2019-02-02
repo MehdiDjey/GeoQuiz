@@ -3,19 +3,11 @@ package com.example.geoquiz;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
+
 
 public class Player implements Parcelable {
     String name;
     int score;
-
-    public Player() {
-    }
-
-   /* public Player(String name, int score) {
-        this.name = name;
-        this.score = score;
-    }*/
 
     public String getName() {
         return name;
@@ -35,12 +27,7 @@ public class Player implements Parcelable {
 
     @Override
     public String toString() {
-        return " Name: " + name +"; Score: " + score ;
-    }
-
-    Player(Parcel in) {
-        name = in.readString();
-        score = in.readInt();
+        return " Player " + name +"  ||  score: " + score ;
     }
 
     @Override
@@ -50,15 +37,22 @@ public class Player implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeInt(score);
+        dest.writeString(this.name);
+        dest.writeInt(this.score);
     }
 
-    @SuppressWarnings("unused")
+    public Player() {
+    }
+
+    protected Player(Parcel in) {
+        this.name = in.readString();
+        this.score = in.readInt();
+    }
+
     public static final Parcelable.Creator<Player> CREATOR = new Parcelable.Creator<Player>() {
         @Override
-        public Player createFromParcel(Parcel in) {
-            return new Player(in);
+        public Player createFromParcel(Parcel source) {
+            return new Player(source);
         }
 
         @Override

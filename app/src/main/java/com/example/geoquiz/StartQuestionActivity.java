@@ -9,29 +9,28 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import android.os.Looper;
-import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class StartQuestionActivity extends AppCompatActivity {
 
@@ -72,12 +71,17 @@ public class StartQuestionActivity extends AppCompatActivity {
     QuestionFragment frag;
     private static final long START_TIME_IN_MILLIS = 600000;
     private CountDownTimer mCountDownTimer;
-
+    ViewGroup listViewLayout;
     private boolean mTimerRunning;
     String playerName;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
     private long mEndTime;
      ArrayList<String> arrPackage = null;
+
+    private ArrayList<Player> scores;
+    private MySharedPreference sharedPreference;
+    private HashSet<String> scoreset;
+    private Gson gson;
 
     int score;
     String getReponse1, getReponse2, getReponse3, getReponse4;
@@ -91,6 +95,11 @@ public class StartQuestionActivity extends AppCompatActivity {
         score_tv = findViewById(R.id.tv_score_question);
         question_tv = findViewById(R.id.tv_question);
         rowSize = dbHelper.getAll().size();
+        //listViewLayout = (ViewGroup)findViewById(R.id.layout_listview);
+
+        gson = new Gson();
+        sharedPreference = new MySharedPreference(getApplicationContext());
+        getHighScoreListFromSharedPreference();
 
         arrPackage = new ArrayList<>();
         sharedpreferences = getSharedPreferences(MYPREF, Context.MODE_PRIVATE);
@@ -105,6 +114,32 @@ public class StartQuestionActivity extends AppCompatActivity {
         //shared = getSharedPreferences("App_settings", MODE_PRIVATE);
         // add values for your ArrayList any where...
         //arrPackage = new ArrayList<>();
+
+    }
+
+    private void saveScoreListToSharedpreference(ArrayList<Player> scoresList) {
+        //convert ArrayList object to String by Gson
+        String jsonScore = gson.toJson(scoresList);
+
+
+        //save to shared preference
+        sharedPreference.saveHighScoreList(jsonScore);
+
+
+    }
+
+    public void getHighScoreListFromSharedPreference() {
+
+        String jsonScore = sharedPreference.getHighScoreList();
+        Type type = new TypeToken<List<Player>>(){}.getType();
+        scores = gson.fromJson(jsonScore, type);
+        Log.i("dsd", "getHighScoreListFromSharedPreference: "+scores);
+
+        if (scores == null) {
+            scores = new ArrayList<>();
+        }
+
+
 
     }
 
@@ -440,7 +475,7 @@ public class StartQuestionActivity extends AppCompatActivity {
     }
 
 ArrayList<Player> playerScoreList ;
-
+    private ListView listScore;
     protected void showInputDialog() {
 
         // get prompts.xml view
@@ -459,14 +494,19 @@ ArrayList<Player> playerScoreList ;
                         playerName = editText.getText().toString();
                         //Save();
 
-                        //  getNameScore();
+                        getNameScore();
                        // saveArrayList(getNameScore(), "NameScore");
                         //store();
                        //getButton_Clicked();
-                        saveData();
-                        Intent back = new Intent(StartQuestionActivity.this, QuestionActivity.class);
-                        startActivity(back);
-                        loadData();
+                        //saveData();
+
+                        /*Intent back = new Intent(StartQuestionActivity.this, QuestionActivity.class);
+                        startActivity(back);*/
+
+                        Intent mIntent = new Intent(StartQuestionActivity.this, HighScoreQuestionActivity.class);
+                        mIntent.putParcelableArrayListExtra("UniqueKey",scores);
+                        startActivity(mIntent);
+                        //loadData();
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -485,12 +525,21 @@ ArrayList<Player> playerScoreList ;
     ArrayList<Player> getNameScore() {
         //layerScoreList = new ArrayList<>();
         Player myPlayer ;
-       myPlayer = new Player();
+        Player highScore = new Player();
+        highScore.setName(playerName);
+        highScore.setScore(score);
+
+        scores.add(highScore);
+
+        saveScoreListToSharedpreference(scores);
+
+/*²
 
        myPlayer.setName(playerName);
        myPlayer.setScore(score);
+*/
 
-        playerScoreList.add(myPlayer);
+        //playerScoreList.add(myPlayer);
 
         Log.i("dd", "getNameScore: "+playerScoreList);
 
@@ -511,7 +560,7 @@ ArrayList<Player> playerScoreList ;
     }
 
     private void loadData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+    /*    SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("task list", null);
         Type type = new TypeToken<ArrayList<Player>>() {}.getType();
@@ -525,6 +574,6 @@ ArrayList<Player> playerScoreList ;
         intent.putParcelableArrayListExtra("key", playerScoreList);
         startActivity(intent);
         Log.i("sds", "loadData: "+playerScoreList);
-    }
-    }
+    }*/
+    }}
 
