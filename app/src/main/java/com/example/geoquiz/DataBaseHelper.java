@@ -153,20 +153,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
             }while (cursor.moveToNext());
         }
-      //getRowCount(cursor);
 
         cursor.close();
         db.close();
-       Log.i(TAG, "getAll: "+country.toString());
+        Log.i(TAG, "getAll: "+country.toString());
 
         return country;
 
     }
-
-        public int getRowCount( ) {
-
-            return country.size();
-        }
-
 
 }

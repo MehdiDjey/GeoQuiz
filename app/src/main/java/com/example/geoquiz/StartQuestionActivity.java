@@ -1,14 +1,19 @@
 package com.example.geoquiz;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import android.os.Looper;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,14 +24,20 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class StartQuestionActivity extends AppCompatActivity {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
+    public static final String MYPREF = "mypref";
+    public static final String NAME = "nameKey";
+    public static final String SCORE = "scorelKey";
 
     private static final String QUESTION_PAYS = "Quel est le drapeau de ";
     private static final String QUESTION_POPULATION = "Quel est la population de";
@@ -35,6 +46,7 @@ public class StartQuestionActivity extends AppCompatActivity {
     private static final String QUESTION_MONUMENT = "Ou ce trouve ce monument";
     private static final String QUESTION_CAPITAL = "Qelle est la capitale de ";
     public TextView question_tv;
+    SharedPreferences sharedpreferences;
     DataBaseHelper dbHelper;
     Random randomQuestion = new Random();
     ArrayList<CountryInfo> questReponse;
@@ -65,7 +77,7 @@ public class StartQuestionActivity extends AppCompatActivity {
     String playerName;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
     private long mEndTime;
-
+     ArrayList<String> arrPackage = null;
 
     int score;
     String getReponse1, getReponse2, getReponse3, getReponse4;
@@ -80,7 +92,8 @@ public class StartQuestionActivity extends AppCompatActivity {
         question_tv = findViewById(R.id.tv_question);
         rowSize = dbHelper.getAll().size();
 
-
+        arrPackage = new ArrayList<>();
+        sharedpreferences = getSharedPreferences(MYPREF, Context.MODE_PRIVATE);
         addListnerRadio();
 
         //addListnerRadio(view);
@@ -88,6 +101,10 @@ public class StartQuestionActivity extends AppCompatActivity {
         getRandQuestion();
         getRandResponse();
         startTimer();
+
+        //shared = getSharedPreferences("App_settings", MODE_PRIVATE);
+        // add values for your ArrayList any where...
+        //arrPackage = new ArrayList<>();
 
     }
 
@@ -399,7 +416,7 @@ public class StartQuestionActivity extends AppCompatActivity {
     CountDownTimer countDownTimer;
 
     private void startTimer() {
-        countDownTimer = new CountDownTimer(60 * 1000, 1000) {
+        countDownTimer = new CountDownTimer(10 * 1000, 1000) {
             public void onTick(long millisUntilFinished) {
                 isRunning = true;
                 timer.setText("Temps restant: " + millisUntilFinished / 1000);
@@ -422,6 +439,7 @@ public class StartQuestionActivity extends AppCompatActivity {
         }
     }
 
+ArrayList<Player> playerScoreList ;
 
     protected void showInputDialog() {
 
@@ -431,7 +449,7 @@ public class StartQuestionActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(StartQuestionActivity.this);
         alertDialogBuilder.setView(promptView);
 
-        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+        final EditText editText = promptView.findViewById(R.id.edittext);
         // setup a dialog window
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -439,8 +457,16 @@ public class StartQuestionActivity extends AppCompatActivity {
 
                         //resultText.setText("Hello, " + editText.getText());
                         playerName = editText.getText().toString();
+                        //Save();
+
+                        //  getNameScore();
+                       // saveArrayList(getNameScore(), "NameScore");
+                        //store();
+                       //getButton_Clicked();
+                        saveData();
                         Intent back = new Intent(StartQuestionActivity.this, QuestionActivity.class);
                         startActivity(back);
+                        loadData();
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -454,4 +480,51 @@ public class StartQuestionActivity extends AppCompatActivity {
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
-}
+
+
+    ArrayList<Player> getNameScore() {
+        //layerScoreList = new ArrayList<>();
+        Player myPlayer ;
+       myPlayer = new Player();
+
+       myPlayer.setName(playerName);
+       myPlayer.setScore(score);
+
+        playerScoreList.add(myPlayer);
+
+        Log.i("dd", "getNameScore: "+playerScoreList);
+
+        return playerScoreList;
+    }
+
+    private void saveData() {
+        if (playerScoreList == null) {
+            playerScoreList = new ArrayList<>();
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(getNameScore());
+        Log.i("sds", "saveData: ");
+        editor.putString("task list", json);
+        editor.apply();
+    }
+
+    private void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("task list", null);
+        Type type = new TypeToken<ArrayList<Player>>() {}.getType();
+        playerScoreList = gson.fromJson(json, type);
+
+        if (playerScoreList == null) {
+           playerScoreList = new ArrayList<>();
+        }
+
+        Intent intent = new Intent(getApplicationContext() ,HighScoreQuestionActivity.class);
+        intent.putParcelableArrayListExtra("key", playerScoreList);
+        startActivity(intent);
+        Log.i("sds", "loadData: "+playerScoreList);
+    }
+    }
+

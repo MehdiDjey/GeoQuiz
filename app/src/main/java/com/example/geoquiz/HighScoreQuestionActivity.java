@@ -1,11 +1,18 @@
 package com.example.geoquiz;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,13 +25,19 @@ public class HighScoreQuestionActivity extends AppCompatActivity {
     //private int[] score = new int[0];
 
     Integer[] valuesInt = new Integer[]{12, 212, 21, 2323, 3232, 2121};
-
+    ArrayList<? extends String> storedata ;
+    SharedPreferences sharedpreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_high_score_question);
 
         scoreList = findViewById(R.id.lv_scoreQuestion);
+
+        storedata = getIntent().getParcelableArrayListExtra("key");
+        Log.i("dsd", "onCreate: testou "+storedata);
+        //getIntent().getParcelableArrayListExtra("key");
+
 
         Arrays.sort(valuesInt, Collections.<Integer>reverseOrder());
 
