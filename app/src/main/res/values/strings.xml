@@ -16,4 +16,8 @@
     <string name="confirmer_responseToQuestion">Confirmer</string>
     <string name="aucune">Aucune</string>
     <string name="mon_fragmeent">Mon fragmeent</string>
+    <string name="numquestion">NumQuestion</string>
+    <string name="timer">Timer</string>
+    <string name="_0">0</string>
+    <string name="score">Score :</string>
 </resources>

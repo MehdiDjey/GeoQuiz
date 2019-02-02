@@ -3,11 +3,16 @@ package com.example.geoquiz;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,24 +42,18 @@ public class QuestionFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
 
-    private static final String QUESTION_PAYS = "Quel est ce pays";
+    private static final String QUESTION_PAYS = "Quel est le drapeau de ";
     private static final String QUESTION_POPULATION = "Quel est la population de";
     private static final String QUESTION_DEVISE = "Quel est la devise de";
-    private static final String QUESTION_FLAG = "Quel est ce drapeau";
+    private static final String QUESTION_FLAG = "A quel pays appartient ce drapeau";
     private static final String QUESTION_MONUMENT = "Ou ce trouve ce monument";
     private static final String QUESTION_CAPITAL = "Qelle est la capitale de ";
-    private static String REPONSE_1;
-    private static String REPONSE_2;
-    private static String REPONSE_3;
-    private static String REPONSE_4;
-    private static String AUCUNE;
     public TextView question_tv;
     DataBaseHelper dbHelper;
     Random randomQuestion = new Random();
-
     ArrayList<CountryInfo> questReponse;
     RadioGroup radioGroup;
-    RadioButton reponse1, reponse2, reponse3, reponse4, aucune;
+    RadioButton reponse1, reponse2, reponse3, reponse4;
     int rowSize;
     String[] questions = {QUESTION_CAPITAL, QUESTION_DEVISE, QUESTION_PAYS, QUESTION_POPULATION, QUESTION_MONUMENT, QUESTION_FLAG};
     boolean question1;
@@ -63,8 +62,6 @@ public class QuestionFragment extends Fragment {
     boolean question4;
     boolean question5;
     boolean question6;
-    ArrayList<CountryInfo> arrayOfList;
-    int idReponse1, idReponse2, idReponse3, idReponse4, idQuestion;
     CountryInfo quest;
     CountryInfo ans1;
     CountryInfo ans2;
@@ -76,11 +73,12 @@ public class QuestionFragment extends Fragment {
 
     int score;
 
+
     String getReponse1, getReponse2, getReponse3, getReponse4;
 
     private RadioButton radioSelected;
     private OnFragmentInteractionListener mListener;
-    private QuestionActivity questionActivity;
+
 
     public QuestionFragment() {
         // Required empty public constructor
@@ -115,7 +113,7 @@ public class QuestionFragment extends Fragment {
 
 
     }
-
+    String packageName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,15 +123,17 @@ public class QuestionFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_question, container, false);
         question_tv = view.findViewById(R.id.tv_question);
         //QuestionReponse questionReponse = new QuestionReponse();
-
+        // startQuestionActivity = new StartQuestionActivity();
         rowSize = dbHelper.getAll().size();
         addListnerRadio(view);
+
         //addListnerRadio(view);
         getRandom();
-        question_tv.setText(getRandQuestion());
-
+        getRandQuestion();
         getRandResponse();
 
+        //countDownTimer();
+         packageName = view.getContext().getPackageName();
 
         // Inflate the layout for this fragment
         return view;
@@ -146,13 +146,12 @@ public class QuestionFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
+    OnDataPass dataPasser;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof QuestionActivity) {
-            this.questionActivity = (QuestionActivity) context;
-        }
+
+
     }
 
     @Override
@@ -163,7 +162,7 @@ public class QuestionFragment extends Fragment {
 
     String correctAnswer;
 
-    String getRandQuestion() {
+    public void getRandQuestion() {
         String theQuestion;
 
         switch (randomQuestion.nextInt(questions.length)) {
@@ -171,6 +170,7 @@ public class QuestionFragment extends Fragment {
             case 0: // Questions pour les capitales
                 correctAnswer = quest.getCapitale();
                 theQuestion = questions[0] + " " + quest.getPays();
+                question_tv.setText(theQuestion);
 
 
                 question1 = true;
@@ -186,6 +186,7 @@ public class QuestionFragment extends Fragment {
                 correctAnswer = quest.getDevise();
 
                 theQuestion = questions[1] + " " + quest.getPays();
+                question_tv.setText(theQuestion);
 
                 question1 = false;
                 question2 = true;
@@ -196,12 +197,11 @@ public class QuestionFragment extends Fragment {
 
                 break;
 
-            case 2: // Question
+            case 2: // Question les drapeaux
+                correctAnswer = quest.getFlag();
                 theQuestion = questions[2] + " " + quest.getPays();
-                reponse1.setText("PAYS&");
-                reponse2.setText("PAYQ2");
-                reponse3.setText("PAYS3");
-                reponse4.setText("PAYS4");
+                question_tv.setText(theQuestion);
+
                 question1 = false;
                 question2 = false;
                 question3 = true;
@@ -214,6 +214,7 @@ public class QuestionFragment extends Fragment {
             case 3: // Question pour le nombre de population
                 correctAnswer = quest.getPopulation();
                 theQuestion = questions[3] + " " + quest.getPays();
+                question_tv.setText(theQuestion);
 
                 question1 = false;
                 question2 = false;
@@ -228,6 +229,7 @@ public class QuestionFragment extends Fragment {
 
                 correctAnswer = quest.getMonument();
                 theQuestion = questions[4] + " " + quest.getMonument();
+                question_tv.setText(theQuestion);
 
                 question1 = false;
                 question2 = false;
@@ -240,8 +242,12 @@ public class QuestionFragment extends Fragment {
 
             case 5: // Question pour ls flag
 
-                correctAnswer = quest.getFlag();
-                theQuestion = questions[5] + " " + quest.getFlag();
+                correctAnswer = quest.getPays();
+                theQuestion = questions[5]+" "+quest.getFlag();
+ /*               question_tv.setTransformationMethod(null);
+                SpannableStringBuilder ssb = new SpannableStringBuilder(theQuestion);
+                ssb.setSpan(new ImageSpan(context, getIdRessource(quest.getFlag()), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);*/
+                question_tv.setText(theQuestion);
 
                 question1 = false;
                 question2 = false;
@@ -263,7 +269,6 @@ public class QuestionFragment extends Fragment {
         }
         Log.i("tag", "getRandQuestion: " + correctAnswer);
 
-        return theQuestion;
     }
 
     void getRandResponse() {
@@ -282,10 +287,36 @@ public class QuestionFragment extends Fragment {
             reponse4.setText(questReponse.get(3).getDevise());
 
         } else if (question3 && noDuplicate()) {
-            reponse1.setText("PAYS&");
-            reponse2.setText("PAYQ2");
-            reponse3.setText("PAYS3");
-            reponse4.setText("PAYS4");
+
+ /*               reponse1.setButtonDrawable(GetImage(getContext(),questReponse.get(0).getFlag()));
+                reponse2.setButtonDrawable(GetImage(getContext(),questReponse.get(1).getFlag()));
+                reponse3.setButtonDrawable(GetImage(getContext(),questReponse.get(2).getFlag()));
+                reponse4.setButtonDrawable(GetImage(getContext(),questReponse.get(3).getFlag()));*/
+          /*      reponse1.setButtonDrawable(getIdRessource(questReponse.get(0).getFlag()));
+                reponse2.setButtonDrawable(getIdRessource(questReponse.get(1).getFlag()));
+                reponse3.setButtonDrawable(getIdRessource(questReponse.get(2).getFlag()));
+                reponse4.setButtonDrawable(getIdRessource(questReponse.get(3).getFlag()));*/
+/*
+            String mDrawableName1 = questReponse.get(0).getFlag();
+            String mDrawableName2 = questReponse.get(1).getFlag();
+            String mDrawableName3 = questReponse.get(2).getFlag();
+            String mDrawableName4 = questReponse.get(3).getFlag();
+            int resID1 = getResources().getIdentifier(mDrawableName1 , "drawable", this.getClass().getName());
+            int resID2 = getResources().getIdentifier(mDrawableName2 , "drawable", this.getClass().getName());
+            int resID3 = getResources().getIdentifier(mDrawableName3 , "drawable", this.getClass().getName());
+            int resID4 = getResources().getIdentifier(mDrawableName4 , "drawable", this.getClass().getName());
+
+          reponse1.setButtonDrawable(resID1);
+          reponse2.setButtonDrawable(resID2);
+          reponse3.setButtonDrawable(resID3);
+          reponse4.setButtonDrawable(resID4);
+*/
+            reponse1.setText(questReponse.get(0).getFlag());
+            reponse2.setText(questReponse.get(1).getPays());
+            reponse3.setText(questReponse.get(2).getFlag());
+            reponse4.setText(questReponse.get(3).getFlag());
+
+
 
         } else if (question4 && noDuplicate()) {
             reponse1.setText(questReponse.get(0).getPopulation());
@@ -300,16 +331,32 @@ public class QuestionFragment extends Fragment {
             reponse4.setText(questReponse.get(3).getMonument());
 
         } else if (question6 && noDuplicate()) {
-            String ressourceImage=  questReponse.get(0).getFlag()+".png";
-            reponse1.setButtonDrawable(R.drawable.flag_alger);
-            reponse1.setText(questReponse.get(0).getFlag());
-            reponse2.setText(questReponse.get(1).getFlag());
-            reponse3.setText(questReponse.get(2).getFlag());
-            reponse4.setText(questReponse.get(3).getFlag());
+
+            reponse1.setText(questReponse.get(0).getPays());
+            reponse2.setText(questReponse.get(1).getPays());
+            reponse3.setText(questReponse.get(2).getPays());
+            reponse4.setText(questReponse.get(3).getPays());
         }
 
     }
 
+    public Drawable GetImage(Context c, String ImageName) {
+
+        return c.getResources().getDrawable(c.getResources().getIdentifier(ImageName, "drawable", packageName));
+    }
+
+    public int getIdRessource(String imageName) {
+        return  getResources().getIdentifier(imageName, "drawable",  packageName);
+    }
+
+    public static int getResourseId(Context context, String pVariableName, String pResourcename, String pPackageName) throws RuntimeException {
+        try {
+            return context.getResources().getIdentifier(pVariableName, pResourcename, pPackageName);
+        } catch (Exception e) {
+            Toast.makeText(context, "Error to load image", Toast.LENGTH_SHORT).show();
+            throw new RuntimeException("Error getting Resource ID.", e);
+        }
+    }
 
     boolean noDuplicate() {
         return ans1.getId() != ans2.getId()
@@ -346,21 +393,10 @@ public class QuestionFragment extends Fragment {
 
     }
 
-    public void setTextView(String text) {
+    /*public void setTextView(String text) {
         question_tv.setText(text);
-    }
+    }*/
 
-    // TODO: 28/01/19
-    public boolean checkRepone() {
-        Log.i("dsds", "checkRepone: " + idQuestion + "  " + idReponse1 + "   " + idReponse2 + "  " + idReponse3 + "   " + idReponse4);
-        if (idQuestion == idReponse1) {
-            return true;
-        } else if (idQuestion == idReponse2) {
-            return true;
-        } else if (idQuestion == idReponse3) {
-            return true;
-        } else return idQuestion == idReponse4;
-    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
@@ -376,8 +412,10 @@ public class QuestionFragment extends Fragment {
         reponse4 = view.findViewById(R.id.radioButton_reponse4);
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+
                 reset();
                 switch (checkedId) {
 
@@ -440,17 +478,73 @@ public class QuestionFragment extends Fragment {
             @Override
             public void run() {
 
-                setTextView(getRandQuestion());
+                getRandQuestion();
                 getRandResponse();
                 getRandom();
                 reponse1.setTextColor(Color.BLACK);
                 reponse2.setTextColor(Color.BLACK);
                 reponse3.setTextColor(Color.BLACK);
                 reponse4.setTextColor(Color.BLACK);
+                reponse1.setButtonDrawable(null);
+                reponse2.setButtonDrawable(null);
+                reponse3.setButtonDrawable(null);
+                reponse4.setButtonDrawable(null);
             }
             }, 2000);
     }
+    public int counter;
+  /*  void countDownTimer() {
+
+        new CountDownTimer(30000, 1000){
+            public void onTick(long millisUntilFinished){
+               // startQuestionActivity.timer.setText(String.valueOf(counter));
+                //textView.setText(String.valueOf());
+                counter++;
+            }
+            public  void onFinish(){
+                startQuestionActivity.timer.setText("FINISH!!");
+            }
+        }.start();
+    }*/
+
+    public void passDataa() {
+        Bundle gameData = new Bundle();
+
+        gameData.putInt("score",score);
+        Intent intent = getActivity().getIntent();
+        intent.putExtras(gameData);
+    }
+
+    public interface OnDataPass {
+        public void onDataPass(String data);
+    }
+
+    public void passData(String data) {
+        dataPasser.onDataPass(data);
+    }
+
+
+    private void sendData()
+    {
+        //INTENT OBJ
+        Intent i = new Intent(getActivity().getBaseContext(),
+                StartQuestionActivity.class);
+
+        //PACK DATA
+        //i.putExtra("SENDER_KEY", "MyFragment");
+        i.putExtra("score", score);
+        //i.putExtra("YEAR_KEY", Integer.valueOf(launchYearSpinner.getSelectedItem().toString()));
+
+        //RESET WIDGETS
+     /*   nameFragTxt.setText("");
+        launchYearSpinner.setSelection(0);
+*/
+        //START ACTIVITY
+        getActivity().startActivity(i);
+    }
+
 }
+
 
 
 
