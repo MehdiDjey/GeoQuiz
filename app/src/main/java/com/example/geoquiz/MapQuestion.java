@@ -1,11 +1,10 @@
 package com.example.geoquiz;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,22 +14,22 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.RoundCap;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback {
-     MapView mapView;
-     GoogleMap gmap;
-     TextView question_situer;
-      TextView distance;
-      TextView randomCountry;
-
+    MapView mapView;
+    GoogleMap gmap;
+    TextView question_situer;
+    TextView distance;
+    TextView randomCountry;
 
 
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -54,18 +53,18 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
     }
 
     String randomCountry() {
-            Random rnd = new Random();
-           return dbHelper.getAll().get(rnd.nextInt(dbHelper.getAll().size())).getPays();
+        Random rnd = new Random();
+        return dbHelper.getAll().get(rnd.nextInt(dbHelper.getAll().size())).getPays();
     }
 
-    String randomCapital(){
+    String randomCapital() {
         Random rnd = new Random();
-         return dbHelper.getAll().get(rnd.nextInt(dbHelper.getAll().size())).getCapitale();
+        return dbHelper.getAll().get(rnd.nextInt(dbHelper.getAll().size())).getCapitale();
     }
 
     public void findByView() {
         mapView = findViewById(R.id.mapView);
-        question_situer= findViewById(R.id.tv_situer);
+        question_situer = findViewById(R.id.tv_situer);
         distance = findViewById(R.id.tv_distance);
         randomCountry = findViewById(R.id.country_tv);
 
@@ -99,16 +98,19 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         super.onStop();
         mapView.onStop();
     }
+
     @Override
     protected void onPause() {
         mapView.onPause();
         super.onPause();
     }
+
     @Override
     protected void onDestroy() {
         mapView.onDestroy();
         super.onDestroy();
     }
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -136,11 +138,11 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
 
         gmap.moveCamera(CameraUpdateFactory.newLatLng(ny));
 
-        goToLocationByName();
 
+        getTouchCordinate();
     }
 
-    public  void goToLocationByName() {
+    public void goToLocationByName() {
         List<Address> addressList = null;
         String location = randomCountry.getText().toString();
         if (location != null || !location.equals("")) {
@@ -153,9 +155,11 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
             }
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            countryCapitale = new LatLng(address.getLatitude(),address.getLongitude());
+
             gmap.addMarker(new MarkerOptions().position(latLng).title(location));
             gmap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            Toast.makeText(getApplicationContext(),address.getLatitude()+" "+address.getLongitude(),Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), address.getLatitude() + " " + address.getLongitude(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -167,8 +171,57 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public void onChangeType(View view) {
+        gmap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
 
     public void onTest(View view) {
+    }
+
+    LatLng countryCapitale;
+    LatLng userTouche;
+    public void getTouchCordinate() {
+        gmap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+                // Creating a marker
+                MarkerOptions markerOptions = new MarkerOptions();
+
+                // Setting the position for the marker
+                markerOptions.position(latLng);
+
+                // Setting the title for the marker.
+                // This will be displayed on taping the marker
+                markerOptions.title(latLng.latitude + " : " + latLng.longitude);
+
+                userTouche = new LatLng(latLng.latitude,latLng.longitude);
+
+                // Clears the previously touched position
+                gmap.clear();
+                goToLocationByName();
+                drawDistance();
+                // Animating to the touched position
+                //gmap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                // Placing a marker on the touched position
+                //gmap.addMarker(markerOptions);
+            }
+
+        });
+    }
+
+    public void drawDistance() {
+        PolylineOptions poly = new PolylineOptions();
+        poly.add(userTouche);
+        poly.add(countryCapitale);
+        poly.color(Color.RED);
+        poly.geodesic(true);
+        poly.startCap(new RoundCap());
+        poly.width(20);
+        poly.jointType(JointType.BEVEL);
+
+        gmap.addPolyline(poly);
+
     }
 }
