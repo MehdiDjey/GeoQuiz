@@ -3,6 +3,7 @@ package com.example.geoquiz;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -30,6 +31,7 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
     TextView question_situer;
     TextView distance;
     TextView randomCountry;
+    TextView theDistance;
 
 
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -67,6 +69,7 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         question_situer = findViewById(R.id.tv_situer);
         distance = findViewById(R.id.tv_distance);
         randomCountry = findViewById(R.id.country_tv);
+        theDistance = findViewById(R.id.tv_Thedistance);
 
     }
 
@@ -222,6 +225,18 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         poly.jointType(JointType.BEVEL);
 
         gmap.addPolyline(poly);
+        theDistance.setText(""+getDistanceInMeter(userTouche.latitude,userTouche.longitude,countryCapitale.latitude,countryCapitale.longitude));
 
+    }
+
+
+    public double getDistanceInMeter(double startLat, double startLong, double endLat, double endLong) {
+        Location sourceLoc = new Location("");
+        sourceLoc.setLatitude(startLat);
+        sourceLoc.setLongitude(startLong);
+        Location destLoc = new Location("");
+        destLoc.setLatitude(endLat);
+        destLoc.setLongitude(endLong);
+        return sourceLoc.distanceTo(destLoc) * 0.001;
     }
 }
