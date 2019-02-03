@@ -14,14 +14,21 @@
             android:id="@+id/tv_situer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/ou_se_situe" />
+
+        <TextView
+            android:id="@+id/country_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="" />
 
         <Button
             android:id="@+id/btn_valide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="onValide"
             android:text="Valid" />
 
         <TextView
@@ -36,6 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="onNew"
             android:text="@string/newbtn" />
 
         <Button
@@ -43,6 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="onTest"
             android:text="@string/test" />
 
         <Button
@@ -50,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="onChangeType"
             android:text="@string/change_map" />
     </LinearLayout>
 
