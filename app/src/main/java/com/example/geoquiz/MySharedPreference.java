@@ -4,17 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class MySharedPreference {
+    private static final String TAG = "MySharedPreference";
+    // Sharedpref file name
+    private static final String PREF_NAME = "pref";
+    private static final String SCORES = "scores";
+    // Shared pref mode
+    int PRIVATE_MODE = 0;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     // Context
     private Context _context;
-
-    // Shared pref mode
-    int PRIVATE_MODE = 0;
-
-    // Sharedpref file name
-    private static final String PREF_NAME = "pref";
-    private static final String SCORES = "scores";
 
     public MySharedPreference(Context context) {
         this._context = context;

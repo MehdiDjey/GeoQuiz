@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 public class QuestionActivity extends AppCompatActivity {
+    private static final String TAG = "QuestionActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,26 +1,17 @@
 package com.example.geoquiz;
 
 public class CountryInfo {
-    int id;
-    String pays, capitale, devise, flag, monument, population;
+    private static final String TAG = "CountryInfo";
+    private int id;
+    private String pays, capitale, devise, flag, monument, population;
 
-    public String getPopulation() {
+    String getPopulation() {
         return population;
     }
 
-    public void setPopulation(String population) {
+    void setPopulation(String population) {
         this.population = population;
     }
-
-  /*  public CountryInfo(int id, String pays, String capitale, String devise, String flag, String monument) {
-        this.id = id;
-        this.pays = pays;
-        this.capitale = capitale;
-        this.devise = devise;
-        this.flag = flag;
-        this.monument = monument;
-    }*/
-
 
     public int getId() {
         return id;
@@ -30,50 +21,50 @@ public class CountryInfo {
         this.id = id;
     }
 
-    public String getPays() {
+    String getPays() {
         return pays;
     }
 
-    public void setPays(String pays) {
+    void setPays(String pays) {
         this.pays = pays;
     }
 
-    public String getCapitale() {
+    String getCapitale() {
         return capitale;
     }
 
-    public void setCapitale(String capitale) {
+    void setCapitale(String capitale) {
         this.capitale = capitale;
     }
 
-    public String getDevise() {
+    String getDevise() {
         return devise;
     }
 
-    public void setDevise(String devise) {
+    void setDevise(String devise) {
         this.devise = devise;
     }
 
-    public String getFlag() {
+    String getFlag() {
         return flag;
     }
 
-    public void setFlag(String flag) {
+    void setFlag(String flag) {
         this.flag = flag;
     }
 
-    public String getMonument() {
+    String getMonument() {
         return monument;
     }
 
-    public void setMonument(String monument) {
+    void setMonument(String monument) {
         this.monument = monument;
     }
 
     @Override
     public String toString() {
-        return " ID: " + id +"; Pays: " + pays + "; Capitale: " + capitale
+        return " ID: " + id + "; Pays: " + pays + "; Capitale: " + capitale
                 + "; Population: " + population + "; Devise: " + devise
-                + "; Monument: " + monument+ "; Flag: " + flag;
+                + "; Monument: " + monument + "; Flag: " + flag;
     }
 }

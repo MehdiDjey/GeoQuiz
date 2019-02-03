@@ -3,21 +3,15 @@ package com.example.geoquiz;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-
-    public static final String TABLE_NAME = "informations";
-    private static final String TAG = "myDataBase";
+    private static final String TAG = "DataBaseHelper";
+    private static final String TABLE_NAME = "informations";
     private static final String DB_NAME = "quizDB";
     private static final String ID_ = "Id_";
     private static final String PAYS = "Pays";
@@ -39,12 +33,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     private static final int DB_VERSION = 1;
-    public String[] columns = {ID_, PAYS, CAPITAL, POPULATION, DEVISE, MONUMENT, FLAG};
+    private String[] columns = {ID_, PAYS, CAPITAL, POPULATION, DEVISE, MONUMENT, FLAG};
 
     private Context context;
 
-        ArrayList<CountryInfo> country;
-    public DataBaseHelper(Context context) {
+    private ArrayList<CountryInfo> country;
+
+    DataBaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
 
@@ -71,51 +66,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         context.deleteDatabase(DB_NAME);
     }
 
-
-    public ArrayList<HashMap<String, String>> getAllProducts() {
-
-        ArrayList<HashMap<String, String>> proList;
-
-        proList = new ArrayList<>();
-
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME;
-
-        SQLiteDatabase database = this.getWritableDatabase();
-
-        Cursor cursor = database.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-
-            do {
-
-                HashMap<String, String> map = new HashMap<>();
-
-                map.put(ID_, cursor.getString(0));
-
-                map.put(PAYS, cursor.getString(1));
-
-                map.put(CAPITAL, cursor.getString(2));
-
-                map.put(POPULATION, cursor.getString(3));
-
-                map.put(DEVISE, cursor.getString(4));
-
-                map.put(MONUMENT, cursor.getString(5));
-
-                map.put(FLAG, cursor.getString(5));
-
-                proList.add(map);
-
-            } while (cursor.moveToNext());
-
-        }
-
-        return proList;
-
-    }
-
-
-    public void insertInfo(CountryInfo country) {
+    void insertInfo(CountryInfo country) {
         ContentValues contentValues = new ContentValues();
         //SQLiteDatabase db =this.getWritableDatabase();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -131,14 +82,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
-   ArrayList<CountryInfo> getAll() {
+    ArrayList<CountryInfo> getAll() {
         SQLiteDatabase db = this.getReadableDatabase();
         String sql = "SELECT DISTINCT  * FROM " + TABLE_NAME;
         Cursor cursor = db.rawQuery(sql, null);
-         country = new ArrayList<>();
+        country = new ArrayList<>();
         CountryInfo countryInfo;
 
-        if (cursor. moveToFirst() ) {
+        if (cursor.moveToFirst()) {
             do {
                 //cursor.moveToNext();
                 countryInfo = new CountryInfo();
@@ -151,15 +102,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 countryInfo.setFlag(cursor.getString(6).trim());
                 country.add(countryInfo);
 
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
 
         cursor.close();
         db.close();
-        Log.i(TAG, "getAll: "+country.toString());
-
         return country;
-
     }
-
 }

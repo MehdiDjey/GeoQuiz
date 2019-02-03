@@ -9,8 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class DatabaseHandler {
-
-    protected static final String TAG = "DataAdapter";
+    private static final String TAG = "DataBaseHandler";
     private static final String DB_NAME = "quizDB";
     private static final String TABLE_NAME = "informations";
     private static final String ID_ = "Id_";

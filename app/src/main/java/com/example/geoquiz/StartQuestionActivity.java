@@ -1,10 +1,8 @@
 package com.example.geoquiz;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -14,9 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -28,15 +24,11 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
 public class StartQuestionActivity extends AppCompatActivity {
-
-    public static final String MYPREF = "mypref";
-    public static final String NAME = "nameKey";
-    public static final String SCORE = "scorelKey";
+    private static final String TAG = "StartQuestionActivity";
 
     private static final String QUESTION_PAYS = "Quel est le drapeau de ";
     private static final String QUESTION_POPULATION = "Quel est la population de";
@@ -45,102 +37,66 @@ public class StartQuestionActivity extends AppCompatActivity {
     private static final String QUESTION_MONUMENT = "Ou ce trouve ce monument";
     private static final String QUESTION_CAPITAL = "Qelle est la capitale de ";
     public TextView question_tv;
-    SharedPreferences sharedpreferences;
+    String[] questions = {QUESTION_CAPITAL, QUESTION_DEVISE, QUESTION_PAYS, QUESTION_POPULATION, QUESTION_MONUMENT, QUESTION_FLAG};
     DataBaseHelper dbHelper;
     Random randomQuestion = new Random();
     ArrayList<CountryInfo> questReponse;
     RadioGroup radioGroup;
     RadioButton reponse1, reponse2, reponse3, reponse4;
     int rowSize;
-    String[] questions = {QUESTION_CAPITAL, QUESTION_DEVISE, QUESTION_PAYS, QUESTION_POPULATION, QUESTION_MONUMENT, QUESTION_FLAG};
+
     boolean question1;
     boolean question2;
     boolean question3;
     boolean question4;
     boolean question5;
     boolean question6;
+
     CountryInfo quest;
     CountryInfo ans1;
     CountryInfo ans2;
     CountryInfo ans3;
     CountryInfo reponseTo;
+
     TextView score_tv;
     TextView timer;
-    int myScore = 0;
     String correctAnswer;
-    QuestionFragment frag;
-    private static final long START_TIME_IN_MILLIS = 600000;
-    private CountDownTimer mCountDownTimer;
-    ViewGroup listViewLayout;
-    private boolean mTimerRunning;
     String playerName;
-    private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
-    private long mEndTime;
-     ArrayList<String> arrPackage = null;
-
-    private ArrayList<Player> scores;
-    private MySharedPreference sharedPreference;
-    private HashSet<String> scoreset;
-    private Gson gson;
-
     int score;
     String getReponse1, getReponse2, getReponse3, getReponse4;
+    boolean isRunning = false;
+    CountDownTimer countDownTimer;
+    ArrayList<Player> playerScoreList;
+    private ArrayList<Player> scores;
+    private MySharedPreference sharedPreference;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_question);
         dbHelper = new DataBaseHelper(this);
-        timer = findViewById(R.id.timer_tv);
-        score_tv = findViewById(R.id.tv_score_question);
-        question_tv = findViewById(R.id.tv_question);
+        findByView();
         rowSize = dbHelper.getAll().size();
-        //listViewLayout = (ViewGroup)findViewById(R.id.layout_listview);
-
         gson = new Gson();
         sharedPreference = new MySharedPreference(getApplicationContext());
         getHighScoreListFromSharedPreference();
-
-        arrPackage = new ArrayList<>();
-        sharedpreferences = getSharedPreferences(MYPREF, Context.MODE_PRIVATE);
         addListnerRadio();
-
-        //addListnerRadio(view);
         getRandom();
         getRandQuestion();
         getRandResponse();
         startTimer();
-
-        //shared = getSharedPreferences("App_settings", MODE_PRIVATE);
-        // add values for your ArrayList any where...
-        //arrPackage = new ArrayList<>();
-
     }
 
-    private void saveScoreListToSharedpreference(ArrayList<Player> scoresList) {
-        //convert ArrayList object to String by Gson
-        String jsonScore = gson.toJson(scoresList);
-
-
-        //save to shared preference
-        sharedPreference.saveHighScoreList(jsonScore);
-
-
-    }
-
-    public void getHighScoreListFromSharedPreference() {
-
-        String jsonScore = sharedPreference.getHighScoreList();
-        Type type = new TypeToken<List<Player>>(){}.getType();
-        scores = gson.fromJson(jsonScore, type);
-        Log.i("dsd", "getHighScoreListFromSharedPreference: "+scores);
-
-        if (scores == null) {
-            scores = new ArrayList<>();
-        }
-
-
-
+    public void findByView() {
+        timer = findViewById(R.id.timer_tv);
+        score_tv = findViewById(R.id.tv_score_question);
+        question_tv = findViewById(R.id.tv_question);
+        radioGroup = findViewById(R.id.radioGroupe);
+        reponse1 = findViewById(R.id.radioButton_reponse1);
+        reponse2 = findViewById(R.id.radioButton_reponse2);
+        reponse3 = findViewById(R.id.radioButton_reponse3);
+        reponse4 = findViewById(R.id.radioButton_reponse4);
     }
 
     public void getRandQuestion() {
@@ -238,18 +194,8 @@ public class StartQuestionActivity extends AppCompatActivity {
                 question6 = true;
 
                 break;
-
-            default:
-                theQuestion = " NULL";
-                reponse1.setText("NULLL");
-                reponse2.setText("NULL");
-                reponse3.setText("NULL");
-                reponse4.setText("NULL");
-                break;
-
         }
         Log.i("tag", "getRandQuestion: " + correctAnswer);
-
     }
 
     void getRandResponse() {
@@ -356,13 +302,6 @@ public class StartQuestionActivity extends AppCompatActivity {
     }
 
     public void addListnerRadio() {
-
-        radioGroup = findViewById(R.id.radioGroupe);
-        reponse1 = findViewById(R.id.radioButton_reponse1);
-        reponse2 = findViewById(R.id.radioButton_reponse2);
-        reponse3 = findViewById(R.id.radioButton_reponse3);
-        reponse4 = findViewById(R.id.radioButton_reponse4);
-
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
             @Override
@@ -414,9 +353,6 @@ public class StartQuestionActivity extends AppCompatActivity {
                         break;
 
                 }
-
-                Log.i("tag", "addListnerRadio: " + getReponse1 + " " + getReponse2 + "  " + getReponse3 + "  " + getReponse4);
-                Log.i("tag", "addListnerRadio:Score  " + score);
                 score_tv.setText(String.valueOf(score));
             }
         });
@@ -447,9 +383,6 @@ public class StartQuestionActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    boolean isRunning = false;
-    CountDownTimer countDownTimer;
-
     private void startTimer() {
         countDownTimer = new CountDownTimer(10 * 1000, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -474,8 +407,6 @@ public class StartQuestionActivity extends AppCompatActivity {
         }
     }
 
-ArrayList<Player> playerScoreList ;
-    private ListView listScore;
     protected void showInputDialog() {
 
         // get prompts.xml view
@@ -490,23 +421,12 @@ ArrayList<Player> playerScoreList ;
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        //resultText.setText("Hello, " + editText.getText());
                         playerName = editText.getText().toString();
-                        //Save();
 
                         getNameScore();
-                       // saveArrayList(getNameScore(), "NameScore");
-                        //store();
-                       //getButton_Clicked();
-                        //saveData();
-
-                        /*Intent back = new Intent(StartQuestionActivity.this, QuestionActivity.class);
-                        startActivity(back);*/
-
                         Intent mIntent = new Intent(StartQuestionActivity.this, HighScoreQuestionActivity.class);
-                        mIntent.putParcelableArrayListExtra("UniqueKey",scores);
+                        mIntent.putParcelableArrayListExtra("UniqueKey", scores);
                         startActivity(mIntent);
-                        //loadData();
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -522,9 +442,7 @@ ArrayList<Player> playerScoreList ;
     }
 
 
-    ArrayList<Player> getNameScore() {
-        //layerScoreList = new ArrayList<>();
-        Player myPlayer ;
+    void getNameScore() {
         Player highScore = new Player();
         highScore.setName(playerName);
         highScore.setScore(score);
@@ -533,47 +451,29 @@ ArrayList<Player> playerScoreList ;
 
         saveScoreListToSharedpreference(scores);
 
-/*²
-
-       myPlayer.setName(playerName);
-       myPlayer.setScore(score);
-*/
-
-        //playerScoreList.add(myPlayer);
-
-        Log.i("dd", "getNameScore: "+playerScoreList);
-
-        return playerScoreList;
+        Log.i("dd", "getNameScore: " + playerScoreList);
     }
 
-    private void saveData() {
-        if (playerScoreList == null) {
-            playerScoreList = new ArrayList<>();
-        }
-        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(getNameScore());
-        Log.i("sds", "saveData: ");
-        editor.putString("task list", json);
-        editor.apply();
+
+    private void saveScoreListToSharedpreference(ArrayList<Player> scoresList) {
+        //convert ArrayList object to String by Gson
+        String jsonScore = gson.toJson(scoresList);
+        //save to shared preference
+        sharedPreference.saveHighScoreList(jsonScore);
     }
 
-    private void loadData() {
-    /*    SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("task list", null);
-        Type type = new TypeToken<ArrayList<Player>>() {}.getType();
-        playerScoreList = gson.fromJson(json, type);
+    public void getHighScoreListFromSharedPreference() {
 
-        if (playerScoreList == null) {
-           playerScoreList = new ArrayList<>();
+        String jsonScore = sharedPreference.getHighScoreList();
+        Type type = new TypeToken<List<Player>>() {
+        }.getType();
+        scores = gson.fromJson(jsonScore, type);
+        Log.i("dsd", "getHighScoreListFromSharedPreference: " + scores);
+
+        if (scores == null) {
+            scores = new ArrayList<>();
         }
+    }
 
-        Intent intent = new Intent(getApplicationContext() ,HighScoreQuestionActivity.class);
-        intent.putParcelableArrayListExtra("key", playerScoreList);
-        startActivity(intent);
-        Log.i("sds", "loadData: "+playerScoreList);
-    }*/
-    }}
+}
 
