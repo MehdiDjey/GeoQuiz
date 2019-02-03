@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void gotToMap(View view) {
+        Intent mapActivity = new Intent(this,MapActivity.class);
+        startActivity(mapActivity);
     }
 
     public void toExit(View view) {

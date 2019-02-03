@@ -42,14 +42,6 @@
             android:onClick="gotToMap"
             tools:ignore="ButtonStyle" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="toPopulateDb"
-        android:text="Populate BD" />
-
     <Button
         android:id="@+id/btn_exit"
         android:layout_width="wrap_content"
