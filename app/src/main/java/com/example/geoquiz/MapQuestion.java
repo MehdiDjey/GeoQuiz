@@ -25,20 +25,19 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
-import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
-import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN;
-
 public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback {
+    private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
     MapView mapView;
     GoogleMap gmap;
     TextView question_situer;
     TextView distance;
     TextView randomCountry;
     TextView theDistance;
-
-
-    private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
+    LatLng countryCapitale;
+    LatLng userTouche;
+    double distanceCalcule;
+    int i = 0;
+    String theDestination = "";
     private DataBaseHelper dbHelper;
 
     @Override
@@ -53,8 +52,6 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
         dbHelper = new DataBaseHelper(this);
-
-
 
 
     }
@@ -128,7 +125,7 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gmap = googleMap;
-        gmap.setMinZoomPreference(12);
+        //gmap.setMinZoomPreference(5);
         gmap.setIndoorEnabled(true);
 
         UiSettings uiSettings = gmap.getUiSettings();
@@ -163,11 +160,11 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
             }
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            countryCapitale = new LatLng(address.getLatitude(),address.getLongitude());
+            countryCapitale = new LatLng(address.getLatitude(), address.getLongitude());
 
             gmap.addMarker(new MarkerOptions().position(latLng).title(location));
             gmap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            Toast.makeText(getApplicationContext(), address.getLatitude() + " " + address.getLongitude(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), address.getLatitude() + " " + address.getLongitude(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -176,7 +173,9 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         drawDistance();
         drawMarker(countryCapitale);
         drawMarker(userTouche);
-        theDistance.setText(""+getDistanceInKilo(userTouche.latitude,userTouche.longitude,countryCapitale.latitude,countryCapitale.longitude));
+        distanceCalcule = getDistanceInKilo(userTouche.latitude, userTouche.longitude, countryCapitale.latitude, countryCapitale.longitude);
+        theDistance.setText("" + getDistanceInKilo(userTouche.latitude, userTouche.longitude, countryCapitale.latitude, countryCapitale.longitude));
+        toastMessage();
     }
 
     public void onNew(View view) {
@@ -184,24 +183,21 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         theDistance.setText("");
         randomSetText();
     }
-    int i=0;
+
     public void onChangeType(View view) {
 
-        int[] mapType  = {GoogleMap.MAP_TYPE_HYBRID, GoogleMap.MAP_TYPE_NORMAL,GoogleMap.MAP_TYPE_SATELLITE,GoogleMap.MAP_TYPE_TERRAIN};
-       if (i < mapType.length) {
-           gmap.setMapType(mapType[i]);
-           i++;
-       } else {
-           i=0;
-       }
-
+        int[] mapType = {GoogleMap.MAP_TYPE_HYBRID, GoogleMap.MAP_TYPE_NORMAL, GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_TERRAIN};
+        if (i < mapType.length) {
+            gmap.setMapType(mapType[i]);
+            i++;
+        } else {
+            i = 0;
+        }
     }
 
     public void onTest(View view) {
     }
 
-    LatLng countryCapitale;
-    LatLng userTouche;
     public void getTouchCordinate() {
         gmap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
@@ -210,7 +206,8 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
 
                 // Creating a marker
                 MarkerOptions markerOptions = new MarkerOptions();
-
+                LatLng countryCapitale;
+                LatLng userTouche;
                 // Setting the position for the marker
                 markerOptions.position(latLng);
 
@@ -218,7 +215,7 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
                 // This will be displayed on taping the marker
                 markerOptions.title(latLng.latitude + " : " + latLng.longitude);
 
-                userTouche = new LatLng(latLng.latitude,latLng.longitude);
+                userTouche = new LatLng(latLng.latitude, latLng.longitude);
 
                 // Clears the previously touched position
                 gmap.clear();
@@ -234,15 +231,19 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
-    public  void randomSetText() {
+    public void randomSetText() {
         Random r = new Random();
         int randomInt = r.nextInt(100) + 1;
 
         if (randomInt % 2 == 0) {
+
             randomCountry.setText(randomCapital());
-        } else  {
+            ;
+        } else {
             randomCountry.setText(randomCountry());
         }
+
+        theDestination = randomCountry.getText().toString();
     }
 
     public void drawDistance() {
@@ -271,7 +272,7 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         return sourceLoc.distanceTo(destLoc) * 0.001;
     }
 
-    private void drawMarker(LatLng point){
+    private void drawMarker(LatLng point) {
         // Creating an instance of MarkerOptions
         MarkerOptions markerOptions = new MarkerOptions();
 
@@ -281,4 +282,14 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         // Adding marker on the Google Map
         gmap.addMarker(markerOptions);
     }
+
+    private void toastMessage() {
+        if (distanceCalcule <= 100) {
+            Toast.makeText(this, "Bravo vous etes pas loin de " + theDestination, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Vous etes trop loin de " + theDistance, Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
 }
