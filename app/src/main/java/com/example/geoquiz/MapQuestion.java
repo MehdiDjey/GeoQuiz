@@ -49,6 +49,7 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
         dbHelper = new DataBaseHelper(this);
+
         randomCountry.setText(randomCapital());
 
 
@@ -167,10 +168,16 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public void onValide(View view) {
-
+        goToLocationByName();
+        drawDistance();
+        drawMarker(countryCapitale);
+        drawMarker(userTouche);
+        theDistance.setText(""+getDistanceInKilo(userTouche.latitude,userTouche.longitude,countryCapitale.latitude,countryCapitale.longitude));
     }
 
     public void onNew(View view) {
+        gmap.clear();
+        theDistance.setText("");
     }
 
     public void onChangeType(View view) {
@@ -202,8 +209,8 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
 
                 // Clears the previously touched position
                 gmap.clear();
-                goToLocationByName();
-                drawDistance();
+                //égoToLocationByName();
+
                 // Animating to the touched position
                 //gmap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
@@ -225,12 +232,12 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         poly.jointType(JointType.BEVEL);
 
         gmap.addPolyline(poly);
-        theDistance.setText(""+getDistanceInMeter(userTouche.latitude,userTouche.longitude,countryCapitale.latitude,countryCapitale.longitude));
+
 
     }
 
 
-    public double getDistanceInMeter(double startLat, double startLong, double endLat, double endLong) {
+    public double getDistanceInKilo(double startLat, double startLong, double endLat, double endLong) {
         Location sourceLoc = new Location("");
         sourceLoc.setLatitude(startLat);
         sourceLoc.setLongitude(startLong);
@@ -238,5 +245,16 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         destLoc.setLatitude(endLat);
         destLoc.setLongitude(endLong);
         return sourceLoc.distanceTo(destLoc) * 0.001;
+    }
+
+    private void drawMarker(LatLng point){
+        // Creating an instance of MarkerOptions
+        MarkerOptions markerOptions = new MarkerOptions();
+
+        // Setting latitude and longitude for the marker
+        markerOptions.position(point);
+
+        // Adding marker on the Google Map
+        gmap.addMarker(markerOptions);
     }
 }
