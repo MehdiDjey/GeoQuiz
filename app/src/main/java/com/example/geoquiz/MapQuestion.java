@@ -25,6 +25,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN;
+
 public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback {
     MapView mapView;
     GoogleMap gmap;
@@ -50,7 +54,7 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         mapView.getMapAsync(this);
         dbHelper = new DataBaseHelper(this);
 
-        randomCountry.setText(randomCapital());
+
 
 
     }
@@ -178,10 +182,19 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
     public void onNew(View view) {
         gmap.clear();
         theDistance.setText("");
+        randomSetText();
     }
-
+    int i=0;
     public void onChangeType(View view) {
-        gmap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
+        int[] mapType  = {GoogleMap.MAP_TYPE_HYBRID, GoogleMap.MAP_TYPE_NORMAL,GoogleMap.MAP_TYPE_SATELLITE,GoogleMap.MAP_TYPE_TERRAIN};
+       if (i < mapType.length) {
+           gmap.setMapType(mapType[i]);
+           i++;
+       } else {
+           i=0;
+       }
+
     }
 
     public void onTest(View view) {
@@ -219,6 +232,17 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
             }
 
         });
+    }
+
+    public  void randomSetText() {
+        Random r = new Random();
+        int randomInt = r.nextInt(100) + 1;
+
+        if (randomInt % 2 == 0) {
+            randomCountry.setText(randomCapital());
+        } else  {
+            randomCountry.setText(randomCountry());
+        }
     }
 
     public void drawDistance() {
