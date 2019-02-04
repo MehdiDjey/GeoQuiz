@@ -214,7 +214,7 @@ public class StartQuestionActivity extends AppCompatActivity {
             reponse4.setText(questReponse.get(3).getDevise());
 
         } else if (question3 && noDuplicate()) {
-
+            getImage();
  /*               reponse1.setButtonDrawable(GetImage(getContext(),questReponse.get(0).getFlag()));
                 reponse2.setButtonDrawable(GetImage(getContext(),questReponse.get(1).getFlag()));
                 reponse3.setButtonDrawable(GetImage(getContext(),questReponse.get(2).getFlag()));
@@ -238,11 +238,15 @@ public class StartQuestionActivity extends AppCompatActivity {
           reponse3.setButtonDrawable(resID3);
           reponse4.setButtonDrawable(resID4);
 */
+ /*           reponse1.setButtonDrawable(resourceID1);
+            reponse2.setButtonDrawable(resourceID2);
+            reponse3.setButtonDrawable(resourceID3);
+            reponse4.setButtonDrawable(resourceID4);*/
+
             reponse1.setText(questReponse.get(0).getFlag());
             reponse2.setText(questReponse.get(1).getPays());
             reponse3.setText(questReponse.get(2).getFlag());
             reponse4.setText(questReponse.get(3).getFlag());
-
 
         } else if (question4 && noDuplicate()) {
             reponse1.setText(questReponse.get(0).getPopulation());
@@ -300,6 +304,8 @@ public class StartQuestionActivity extends AppCompatActivity {
         Log.i("sd", "onCreateView: " + questReponse + " \n " + questReponse.size());
 
     }
+
+
 
     public void addListnerRadio() {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -384,7 +390,7 @@ public class StartQuestionActivity extends AppCompatActivity {
     }
 
     private void startTimer() {
-        countDownTimer = new CountDownTimer(10 * 1000, 1000) {
+        countDownTimer = new CountDownTimer(60 * 1000, 1000) {
             public void onTick(long millisUntilFinished) {
                 isRunning = true;
                 timer.setText("Temps restant: " + millisUntilFinished / 1000);
@@ -473,6 +479,21 @@ public class StartQuestionActivity extends AppCompatActivity {
         if (scores == null) {
             scores = new ArrayList<>();
         }
+    }
+    int resourceID1;
+    int resourceID2;
+    int resourceID3;
+    int resourceID4;
+
+    public void getImage() {
+
+
+         resourceID1 = this.getResources().getIdentifier(questReponse.get(0).getFlag(), "drawable",this.getPackageName());
+         resourceID2 = this.getResources().getIdentifier(questReponse.get(1).getFlag(), "drawable",this.getPackageName());
+         resourceID3 = this.getResources().getIdentifier(questReponse.get(2).getFlag(), "drawable",this.getPackageName());
+         resourceID4 = this.getResources().getIdentifier(questReponse.get(3).getFlag(), "drawable",this.getPackageName());
+
+
     }
 
 }

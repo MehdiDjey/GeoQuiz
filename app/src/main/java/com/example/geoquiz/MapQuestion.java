@@ -206,8 +206,8 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
 
                 // Creating a marker
                 MarkerOptions markerOptions = new MarkerOptions();
-                LatLng countryCapitale;
-                LatLng userTouche;
+               // LatLng countryCapitale;
+                //LatLng userTouche;
                 // Setting the position for the marker
                 markerOptions.position(latLng);
 
@@ -238,7 +238,6 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         if (randomInt % 2 == 0) {
 
             randomCountry.setText(randomCapital());
-            ;
         } else {
             randomCountry.setText(randomCountry());
         }
@@ -248,8 +247,8 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
 
     public void drawDistance() {
         PolylineOptions poly = new PolylineOptions();
-        poly.add(userTouche);
         poly.add(countryCapitale);
+        poly.add(userTouche);
         poly.color(Color.RED);
         poly.geodesic(true);
         poly.startCap(new RoundCap());
