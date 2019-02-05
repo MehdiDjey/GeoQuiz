@@ -25,9 +25,10 @@
     <string name="get">Scores List</string>
     <string name="name">Player Name</string>
     <string name="list_header">listHead</string>
-    <string name="ou_se_situe">Ou se situe</string>
+
     <string name="distance">Distance</string>
     <string name="newbtn">New</string>
     <string name="test">Test</string>
     <string name="change_map">Change Map</string>
+    <string name="ou_ce_situe">Ou ce situe</string>
 </resources>

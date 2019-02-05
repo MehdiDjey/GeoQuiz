@@ -1,5 +1,6 @@
 package com.example.geoquiz;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -44,6 +45,7 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_question);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         findByView();
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
@@ -174,7 +176,7 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         drawMarker(countryCapitale);
         drawMarker(userTouche);
         distanceCalcule = getDistanceInKilo(userTouche.latitude, userTouche.longitude, countryCapitale.latitude, countryCapitale.longitude);
-        theDistance.setText("" + getDistanceInKilo(userTouche.latitude, userTouche.longitude, countryCapitale.latitude, countryCapitale.longitude));
+        theDistance.setText("  " + getDistanceInKilo(userTouche.latitude, userTouche.longitude, countryCapitale.latitude, countryCapitale.longitude));
         toastMessage();
     }
 
@@ -193,9 +195,6 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
         } else {
             i = 0;
         }
-    }
-
-    public void onTest(View view) {
     }
 
     public void getTouchCordinate() {
@@ -237,9 +236,9 @@ public class MapQuestion extends AppCompatActivity implements OnMapReadyCallback
 
         if (randomInt % 2 == 0) {
 
-            randomCountry.setText(randomCapital());
+            randomCountry.setText(" "+randomCapital());
         } else {
-            randomCountry.setText(randomCountry());
+            randomCountry.setText(" "+randomCountry());
         }
 
         theDestination = randomCountry.getText().toString();

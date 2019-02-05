@@ -3,7 +3,9 @@ package com.example.geoquiz;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -75,6 +77,7 @@ public class StartQuestionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_question);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         dbHelper = new DataBaseHelper(this);
         findByView();
         rowSize = dbHelper.getAll().size();
@@ -178,9 +181,16 @@ public class StartQuestionActivity extends AppCompatActivity {
                 break;
 
             case 5: // Question pour ls flag
+                Random rnd = new Random();
+                //int uri = Integer.parseInt("resourceId"+rnd.nextInt(4));
 
+                int  drawbleId = getResources().getIdentifier(questReponse.get(rnd.nextInt(4)).getFlag()+""+rnd.nextInt(4),"drawable",getPackageName());
+
+                Drawable img = getApplicationContext().getResources().getDrawable(drawbleId);
                 correctAnswer = quest.getPays();
-                theQuestion = questions[5] + " " + quest.getFlag();
+                theQuestion = questions[5] + " " + img;
+
+
  /*               question_tv.setTransformationMethod(null);
                 SpannableStringBuilder ssb = new SpannableStringBuilder(theQuestion);
                 ssb.setSpan(new ImageSpan(context, getIdRessource(quest.getFlag()), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);*/
@@ -243,11 +253,15 @@ public class StartQuestionActivity extends AppCompatActivity {
             reponse3.setButtonDrawable(resourceID3);
             reponse4.setButtonDrawable(resourceID4);*/
 
+  /*          reponse1.setButtonDrawable(resourceId1);
+            reponse2.setButtonDrawable(resourceId2);
+            reponse3.setButtonDrawable(resourceId3);
+            reponse4.setButtonDrawable(resourceId4);*/
+
             reponse1.setText(questReponse.get(0).getFlag());
             reponse2.setText(questReponse.get(1).getPays());
             reponse3.setText(questReponse.get(2).getFlag());
             reponse4.setText(questReponse.get(3).getFlag());
-
         } else if (question4 && noDuplicate()) {
             reponse1.setText(questReponse.get(0).getPopulation());
             reponse2.setText(questReponse.get(1).getPopulation());
@@ -484,14 +498,30 @@ public class StartQuestionActivity extends AppCompatActivity {
     int resourceID2;
     int resourceID3;
     int resourceID4;
-
+    int resourceId1;
+    int resourceId2;
+    int resourceId3;
+    int resourceId4;
     public void getImage() {
 
 
-         resourceID1 = this.getResources().getIdentifier(questReponse.get(0).getFlag(), "drawable",this.getPackageName());
-         resourceID2 = this.getResources().getIdentifier(questReponse.get(1).getFlag(), "drawable",this.getPackageName());
-         resourceID3 = this.getResources().getIdentifier(questReponse.get(2).getFlag(), "drawable",this.getPackageName());
-         resourceID4 = this.getResources().getIdentifier(questReponse.get(3).getFlag(), "drawable",this.getPackageName());
+      /*   resourceID1 = this.getResources().getIdentifier("drawable/"+questReponse.get(0).getFlag(), "drawable",this.getPackageName());
+         resourceID2 = this.getResources().getIdentifier("drawable/"+questReponse.get(1).getFlag(), "drawable",this.getPackageName());
+         resourceID3 = this.getResources().getIdentifier("drawable/"+questReponse.get(2).getFlag(), "drawable",this.getPackageName());
+         resourceID4 = this.getResources().getIdentifier("drawable/"+questReponse.get(3).getFlag(), "drawable",this.getPackageName());*/
+
+
+         resourceId1 = this.getResources().getIdentifier("drawable/"+questReponse.get(0).getFlag().toLowerCase(), "drawable",this.getPackageName());
+         resourceId2 = this.getResources().getIdentifier("drawable/"+questReponse.get(1).getFlag().toLowerCase(), "drawable",this.getPackageName());
+         resourceId3 = this.getResources().getIdentifier("drawable/"+questReponse.get(2).getFlag().toLowerCase(), "drawable",this.getPackageName());
+         resourceId4 = this.getResources().getIdentifier("drawable/"+questReponse.get(3).getFlag().toLowerCase(), "drawable",this.getPackageName());
+
+        Log.i(TAG, "getImage: "+resourceId1+" "+resourceId2+" "+resourceId3+" "+resourceId4);
+
+/*
+        this.iv_monument.setVisibility(View.VISIBLE);
+        this.iv_monument.setBackground(this.getResources().getDrawable(resourceId));
+*/
 
 
     }
