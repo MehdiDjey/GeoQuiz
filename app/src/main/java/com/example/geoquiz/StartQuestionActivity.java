@@ -344,7 +344,6 @@ public class StartQuestionActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 reset();
-
                 switch (checkedId) {
 
                     case R.id.radioButton_reponse1:
@@ -402,19 +401,20 @@ public class StartQuestionActivity extends AppCompatActivity {
                         break;
 
                 }
-                myToast();
+                myToast().show();
                 score_tv.setText(String.valueOf(score));
 
             }
         });
     }
-
+    private static final int SHORT_DELAY = 2000;
     public void reset() {
         getTheReponse= false;
         reponse1.setChecked(false);
         reponse2.setChecked(false);
         reponse3.setChecked(false);
         reponse4.setChecked(false);
+
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
 
             @Override
@@ -423,6 +423,7 @@ public class StartQuestionActivity extends AppCompatActivity {
                 getRandQuestion();
                 getRandResponse();
                 getRandom();
+                myToast().cancel();
                 reponse1.setTextColor(Color.BLACK);
                 reponse2.setTextColor(Color.BLACK);
                 reponse3.setTextColor(Color.BLACK);
@@ -431,6 +432,7 @@ public class StartQuestionActivity extends AppCompatActivity {
                 reponse2.setButtonDrawable(null);
                 reponse3.setButtonDrawable(null);
                 reponse4.setButtonDrawable(null);
+
             }
         }, 2000);
     }
@@ -553,13 +555,16 @@ public class StartQuestionActivity extends AppCompatActivity {
 
 
     }
+    private Toast mToastToShow;
+    public Toast myToast(){
 
-    public void myToast(){
         if (getTheReponse) {
-            FancyToast.makeText(StartQuestionActivity.this,"Bravo, bonne reponse !!",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
+         mToastToShow =   FancyToast.makeText(StartQuestionActivity.this,"Bravo, bonne reponse !!",FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true);
         } else {
-            FancyToast.makeText(StartQuestionActivity.this,"Oups !! Faut revoir vos cours de geographie :D",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+           mToastToShow = FancyToast.makeText(StartQuestionActivity.this,"Oups !! Faut revoir vos cours de geographie :D",FancyToast.LENGTH_SHORT,FancyToast.ERROR,true);
         }
+
+      return  mToastToShow;
     }
 
     @Override
