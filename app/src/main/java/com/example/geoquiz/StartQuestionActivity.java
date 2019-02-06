@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -28,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
+
 
 public class StartQuestionActivity extends AppCompatActivity {
     private static final String TAG = "StartQuestionActivity";
@@ -184,17 +188,28 @@ public class StartQuestionActivity extends AppCompatActivity {
                 Random rnd = new Random();
                 //int uri = Integer.parseInt("resourceId"+rnd.nextInt(4));
 
-                int  drawbleId = getResources().getIdentifier(questReponse.get(rnd.nextInt(4)).getFlag()+""+rnd.nextInt(4),"drawable",getPackageName());
+                int  drawbleId = getResources().getIdentifier(questReponse.get(rnd.nextInt(4)).getFlag(),"drawable",getPackageName());
 
                 Drawable img = getApplicationContext().getResources().getDrawable(drawbleId);
                 correctAnswer = quest.getPays();
-                theQuestion = questions[5] + " " + img;
+                theQuestion = questions[5] ;
+
 
 
  /*               question_tv.setTransformationMethod(null);
                 SpannableStringBuilder ssb = new SpannableStringBuilder(theQuestion);
                 ssb.setSpan(new ImageSpan(context, getIdRessource(quest.getFlag()), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);*/
                 question_tv.setText(theQuestion);
+                ImageView imageview = new ImageView(StartQuestionActivity.this);
+                LinearLayout relativelayout = (LinearLayout)findViewById(R.id.myLayout);
+                LinearLayout.LayoutParams params = new LinearLayout
+                        .LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                imageview.setImageResource(drawbleId);
+                imageview.setLayoutParams(params);
+                relativelayout.addView(imageview);
+
+                //question_tv.setCompoundDrawablesWithIntrinsicBounds(img,null,null,null);
 
                 question1 = false;
                 question2 = false;

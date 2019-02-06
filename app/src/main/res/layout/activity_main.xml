@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:gravity="center"
-
+    android:background="@color/myBack"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/welcome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:fontFamily="serif"
         android:gravity="center"
         android:text="@string/welcome_to_geo_quiz"
         android:textSize="24sp"
-        android:textStyle="bold|italic" />
+        android:paddingTop="20dp"
+        android:textStyle="bold|italic"
+        tools:targetApi="jelly_bean" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/intro_lottie_animation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:lottie_fileName="animation1.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -28,17 +37,17 @@
 
         <Button
             android:id="@+id/btn_question"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:background="@drawable/question"
+            android:layout_width="118dp"
+            android:layout_height="114dp"
+            android:background="@drawable/icons81"
             android:onClick="goToQuestions"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/btn_map"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:background="@drawable/map_question"
+            android:layout_width="111dp"
+            android:layout_height="114dp"
+            android:background="@drawable/icons8"
             android:onClick="gotToMap"
             tools:ignore="ButtonStyle" />
     </LinearLayout>
@@ -47,5 +56,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="toExit"
-        android:text="@string/exit" />
+        android:background="@drawable/icons82" />
 </LinearLayout>

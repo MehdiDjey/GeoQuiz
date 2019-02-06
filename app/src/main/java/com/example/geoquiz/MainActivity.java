@@ -7,8 +7,14 @@ import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
+
+import com.airbnb.lottie.LottieAnimationView;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,15 +28,36 @@ public class MainActivity extends AppCompatActivity {
     DataBaseHelper dbHelper;
     SQLiteDatabase sqliteDB;
 
+    LottieAnimationView mLottie;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupWindowAnimations();
+        //mLottie = findViewById(R.id.intro_lottie_animation_view);
 
         dbHelper = new DataBaseHelper(this);
         sqliteDB = dbHelper.getWritableDatabase();
         loadCSV2();
         dbHelper.getAll();
+
+
+        YoYo.with(Techniques.ZoomInUp)
+                .duration(3000)
+                .repeat(0)
+                .playOn(findViewById(R.id.welcome));
+
+    }
+
+    private void setupWindowAnimations() {
+   /*     Fade fade = new Fade();
+        fade.setDuration(4000000);
+        getWindow().setEnterTransition(fade);*/
+
+        Slide slide = new Slide();
+        slide.setDuration(1000);
+        getWindow().setReturnTransition(slide);
     }
 
     public void loadCSV2() {
@@ -112,4 +139,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
+
+
 }

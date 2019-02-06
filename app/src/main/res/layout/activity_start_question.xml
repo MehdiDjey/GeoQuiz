@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     android:orientation="vertical"
-    android:background="@color/background"
+
+    android:background="@color/myBack"
     tools:context=".StartQuestionActivity">
 
     <LinearLayout
@@ -44,6 +45,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/myLayout"
         android:orientation="vertical">
         <TextView
             android:id="@+id/tv_question"
