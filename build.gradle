@@ -18,7 +18,15 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://jitpack.io" }
+
         
+    }
+}
+
+repositories {
+    maven {
+        url "http://dl.bintray.com/glomadrian/maven"
     }
 }
 

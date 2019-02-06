@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -334,7 +335,7 @@ public class StartQuestionActivity extends AppCompatActivity {
 
     }
 
-
+    boolean getTheReponse ;
 
     public void addListnerRadio() {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -343,57 +344,73 @@ public class StartQuestionActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 reset();
+
                 switch (checkedId) {
 
                     case R.id.radioButton_reponse1:
                         getReponse1 = reponse1.getText().toString();
                         if (getReponse1.equals(correctAnswer)) {
+                            getTheReponse= true;
                             score++;
+
                             reponse1.setTextColor(getResources().getColor(R.color.green));
                         } else {
+                            getTheReponse = false;
                             reponse1.setTextColor(getResources().getColor(R.color.red));
                         }
-                        Toast.makeText(StartQuestionActivity.this, reponse1.getText(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(StartQuestionActivity.this, reponse1.getText(), Toast.LENGTH_SHORT).show();
 
                         break;
                     case R.id.radioButton_reponse2:
                         getReponse2 = reponse2.getText().toString();
                         if (getReponse2.equals(correctAnswer)) {
+                            getTheReponse = true;
                             score++;
                             reponse2.setTextColor(getResources().getColor(R.color.green));
                         } else {
+                            getTheReponse = false;
                             reponse2.setTextColor(getResources().getColor(R.color.red));
                         }
-                        Toast.makeText(StartQuestionActivity.this, reponse2.getText(), Toast.LENGTH_SHORT).show();
+
+                        //Toast.makeText(StartQuestionActivity.this, reponse2.getText(), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.radioButton_reponse3:
                         getReponse3 = reponse3.getText().toString();
                         if (getReponse3.equals(correctAnswer)) {
+                            getTheReponse = true;
                             score++;
                             reponse3.setTextColor(getResources().getColor(R.color.green));
                         } else {
+                            getTheReponse= false;
                             reponse3.setTextColor(getResources().getColor(R.color.red));
                         }
-                        Toast.makeText(StartQuestionActivity.this, reponse3.getText(), Toast.LENGTH_SHORT).show();
+
+                        //Toast.makeText(StartQuestionActivity.this, reponse3.getText(), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.radioButton_reponse4:
                         getReponse4 = reponse4.getText().toString();
                         if (getReponse4.equals(correctAnswer)) {
+                            getTheReponse= true;
                             score++;
                             reponse4.setTextColor(getResources().getColor(R.color.green));
                         } else {
+                            getTheReponse= false;
                             reponse4.setTextColor(getResources().getColor(R.color.red));
                         }
-                        Toast.makeText(StartQuestionActivity.this, reponse4.getText(), Toast.LENGTH_SHORT).show();
+
+                        //Toast.makeText(StartQuestionActivity.this, reponse4.getText(), Toast.LENGTH_SHORT).show();
                         break;
 
                 }
+                myToast();
                 score_tv.setText(String.valueOf(score));
+
             }
         });
     }
 
     public void reset() {
+        getTheReponse= false;
         reponse1.setChecked(false);
         reponse2.setChecked(false);
         reponse3.setChecked(false);
@@ -509,10 +526,6 @@ public class StartQuestionActivity extends AppCompatActivity {
             scores = new ArrayList<>();
         }
     }
-    int resourceID1;
-    int resourceID2;
-    int resourceID3;
-    int resourceID4;
     int resourceId1;
     int resourceId2;
     int resourceId3;
@@ -539,6 +552,14 @@ public class StartQuestionActivity extends AppCompatActivity {
 */
 
 
+    }
+
+    public void myToast(){
+        if (getTheReponse) {
+            FancyToast.makeText(StartQuestionActivity.this,"Bravo, bonne reponse !!",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
+        } else {
+            FancyToast.makeText(StartQuestionActivity.this,"Oups !! Faut revoir vos cours de geographie :D",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+        }
     }
 
 }

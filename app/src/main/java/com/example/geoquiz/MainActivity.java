@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupWindowAnimations() {
-   /*     Fade fade = new Fade();
-        fade.setDuration(4000000);
-        getWindow().setEnterTransition(fade);*/
+        Fade fade = new Fade();
+        fade.setDuration(1000);
+        getWindow().setEnterTransition(fade);
 
         Slide slide = new Slide();
         slide.setDuration(1000);
