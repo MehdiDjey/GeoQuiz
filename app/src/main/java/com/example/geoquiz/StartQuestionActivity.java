@@ -562,5 +562,13 @@ public class StartQuestionActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(StartQuestionActivity.this, QuestionActivity.class));
+        finish();
+
+    }
+
 }
 

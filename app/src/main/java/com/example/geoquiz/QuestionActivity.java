@@ -3,6 +3,9 @@ package com.example.geoquiz;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.view.View;
 
 public class QuestionActivity extends AppCompatActivity {
@@ -12,10 +15,19 @@ public class QuestionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
+        setupWindowAnimations();
     }
+    private void setupWindowAnimations() {
+        Explode fade = new Explode();
+        fade.setDuration(1000);
+        getWindow().setEnterTransition(fade);
 
+        Explode slide = new Explode();
+        slide.setDuration(1000);
+        getWindow().setReturnTransition(slide);
+    }
     public void toStart(View view) {
-        Intent startQuestion = new Intent(this, StartQuestionActivity.class);
+        Intent startQuestion = new Intent(this, TimerActivity.class);
         startActivity(startQuestion);
     }
 
