@@ -55,14 +55,13 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textAllCaps="false"
-
             android:textColor="@color/black"
             android:text="@string/mon_fragmeent"
             android:textSize="24sp" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <RadioGroup
@@ -78,17 +77,14 @@
                 android:layout_height="match_parent"
                 android:button="@null"
                 android:layout_weight="1"
-
-                android:text="qsdqsd"
                 android:textSize="24sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_reponse2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-
                 android:layout_weight="1"
-                android:text="xqsd"
+
                 android:button="@null"
                 android:textSize="24sp" />
 
@@ -97,7 +93,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
 
-                android:text="qsdqsd"
                 android:layout_weight="1"
                 android:button="@null"
                 android:textSize="24sp" />
@@ -107,7 +102,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="qsdqsd"
                 android:button="@null"
                 android:textSize="24sp" />
 

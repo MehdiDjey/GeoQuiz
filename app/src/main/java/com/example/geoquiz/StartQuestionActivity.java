@@ -177,27 +177,31 @@ public class StartQuestionActivity extends AppCompatActivity {
                 break;
 
             case 4:// Question pour les monument
-
-                correctAnswer = quest.getMonument();
-                theQuestion = questions[4] + " " + quest.getMonument();
+                int  drawbleIdMonument = getResources().getIdentifier(quest.getMonument(),"drawable",getPackageName());
+                correctAnswer = quest.getPays();
+                theQuestion = questions[4] ;
                 question_tv.setText(theQuestion);
-
-
+                myImage.getLayoutParams().height = 200;
+                myImage.getLayoutParams().width = 200;
+                myImage.requestLayout();
+                myImage.setImageResource(drawbleIdMonument);
                 question1 = false;
                 question2 = false;
                 question3 = false;
                 question4 = false;
                 question5 = true;
                 question6 = false;
-                //getRandIdMonument();
                 break;
 
             case 5: // Question pour ls flag
-                int  drawbleId = getResources().getIdentifier(quest.getFlag(),"drawable",getPackageName());
+                int  drawbleIdFalg = getResources().getIdentifier(quest.getFlag(),"drawable",getPackageName());
                 correctAnswer = quest.getPays();
                 theQuestion = questions[5] ;
                 question_tv.setText(theQuestion);
-                myImage.setImageResource(drawbleId);
+                myImage.getLayoutParams().height = 400;
+                myImage.getLayoutParams().width = 400;
+                myImage.requestLayout();
+                myImage.setImageResource(drawbleIdFalg);
 
                 question1 = false;
                 question2 = false;
@@ -272,10 +276,10 @@ public class StartQuestionActivity extends AppCompatActivity {
             reponse4.setText(questReponse.get(3).getPopulation());
 
         } else if (question5 && noDuplicate()) {
-            reponse1.setText(questReponse.get(0).getMonument());
-            reponse2.setText(questReponse.get(1).getMonument());
-            reponse3.setText(questReponse.get(2).getMonument());
-            reponse4.setText(questReponse.get(3).getMonument());
+            reponse1.setText(questReponse.get(0).getPays());
+            reponse2.setText(questReponse.get(1).getPays());
+            reponse3.setText(questReponse.get(2).getPays());
+            reponse4.setText(questReponse.get(3).getPays());
 
         } else if (question6 && noDuplicate()) {
 
