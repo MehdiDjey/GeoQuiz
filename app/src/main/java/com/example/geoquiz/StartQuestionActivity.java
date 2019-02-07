@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.nex3z.togglebuttongroup.SingleSelectToggleGroup;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.lang.reflect.Type;
@@ -32,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import es.dmoral.toasty.Toasty;
 
 
 public class StartQuestionActivity extends AppCompatActivity {
@@ -51,6 +54,8 @@ public class StartQuestionActivity extends AppCompatActivity {
     RadioGroup radioGroup;
     RadioButton reponse1, reponse2, reponse3, reponse4;
     int rowSize;
+
+        ImageView myImage;
 
     boolean question1;
     boolean question2;
@@ -105,6 +110,7 @@ public class StartQuestionActivity extends AppCompatActivity {
         reponse2 = findViewById(R.id.radioButton_reponse2);
         reponse3 = findViewById(R.id.radioButton_reponse3);
         reponse4 = findViewById(R.id.radioButton_reponse4);
+        myImage = findViewById(R.id.imageView);
     }
 
     public void getRandQuestion() {
@@ -176,6 +182,7 @@ public class StartQuestionActivity extends AppCompatActivity {
                 theQuestion = questions[4] + " " + quest.getMonument();
                 question_tv.setText(theQuestion);
 
+
                 question1 = false;
                 question2 = false;
                 question3 = false;
@@ -186,31 +193,11 @@ public class StartQuestionActivity extends AppCompatActivity {
                 break;
 
             case 5: // Question pour ls flag
-                Random rnd = new Random();
-                //int uri = Integer.parseInt("resourceId"+rnd.nextInt(4));
-
-                int  drawbleId = getResources().getIdentifier(questReponse.get(rnd.nextInt(4)).getFlag(),"drawable",getPackageName());
-
-                Drawable img = getApplicationContext().getResources().getDrawable(drawbleId);
+                int  drawbleId = getResources().getIdentifier(quest.getFlag(),"drawable",getPackageName());
                 correctAnswer = quest.getPays();
                 theQuestion = questions[5] ;
-
-
-
- /*               question_tv.setTransformationMethod(null);
-                SpannableStringBuilder ssb = new SpannableStringBuilder(theQuestion);
-                ssb.setSpan(new ImageSpan(context, getIdRessource(quest.getFlag()), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);*/
                 question_tv.setText(theQuestion);
-                ImageView imageview = new ImageView(StartQuestionActivity.this);
-                LinearLayout relativelayout = (LinearLayout)findViewById(R.id.myLayout);
-                LinearLayout.LayoutParams params = new LinearLayout
-                        .LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                imageview.setImageResource(drawbleId);
-                imageview.setLayoutParams(params);
-                relativelayout.addView(imageview);
-
-                //question_tv.setCompoundDrawablesWithIntrinsicBounds(img,null,null,null);
+                myImage.setImageResource(drawbleId);
 
                 question1 = false;
                 question2 = false;
@@ -409,11 +396,13 @@ public class StartQuestionActivity extends AppCompatActivity {
     }
     private static final int SHORT_DELAY = 2000;
     public void reset() {
+
         getTheReponse= false;
         reponse1.setChecked(false);
         reponse2.setChecked(false);
         reponse3.setChecked(false);
         reponse4.setChecked(false);
+        myImage.setImageResource(0);
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
 
@@ -555,16 +544,17 @@ public class StartQuestionActivity extends AppCompatActivity {
 
 
     }
-    private Toast mToastToShow;
+
     public Toast myToast(){
 
+        Toast mToastToShow;
         if (getTheReponse) {
-         mToastToShow =   FancyToast.makeText(StartQuestionActivity.this,"Bravo, bonne reponse !!",FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true);
+         mToastToShow =   Toasty.success(StartQuestionActivity.this,"Bravo, bonne reponse !!",FancyToast.LENGTH_SHORT,true);
         } else {
-           mToastToShow = FancyToast.makeText(StartQuestionActivity.this,"Oups !! Faut revoir vos cours de geographie :D",FancyToast.LENGTH_SHORT,FancyToast.ERROR,true);
+           mToastToShow = Toasty.error(StartQuestionActivity.this,"Oups !! Faut revoir vos cours de geographie :D",FancyToast.LENGTH_SHORT,true);
         }
 
-      return  mToastToShow;
+      return mToastToShow;
     }
 
     @Override

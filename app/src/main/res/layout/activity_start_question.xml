@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
     android:orientation="vertical"
 
@@ -46,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/myLayout"
+        android:gravity="center"
         android:orientation="vertical">
         <TextView
             android:id="@+id/tv_question"
@@ -53,41 +55,49 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textAllCaps="false"
+
             android:textColor="@color/black"
             android:text="@string/mon_fragmeent"
             android:textSize="24sp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/radioGroupe"
-            android:gravity="center_horizontal">
+            android:layout_weight="1"
+            android:gravity="center">
 
             <RadioButton
                 android:id="@+id/radioButton_reponse1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:button="@null"
                 android:layout_weight="1"
 
-                android:text=""
+                android:text="qsdqsd"
                 android:textSize="24sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_reponse2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
 
                 android:layout_weight="1"
-                android:text=""
+                android:text="xqsd"
                 android:button="@null"
                 android:textSize="24sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_reponse3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
 
-                android:text=""
+                android:text="qsdqsd"
                 android:layout_weight="1"
                 android:button="@null"
                 android:textSize="24sp" />
@@ -95,14 +105,50 @@
             <RadioButton
                 android:id="@+id/radioButton_reponse4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text=""
+                android:text="qsdqsd"
                 android:button="@null"
                 android:textSize="24sp" />
 
         </RadioGroup>
+<!--
+
+
+        <com.nex3z.togglebuttongroup.SingleSelectToggleGroup
+            android:id="@+id/group_choices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tbgCheckedButton="@+id/choice_a"
+            android:layout_marginTop="16dp"
+            app:tbgFlow="true"
+            app:tbgChildSpacing="auto"
+            app:tbgChildSpacingForLastRow="align"
+            app:tbgRowSpacing="8dp">
+
+            <com.nex3z.togglebuttongroup.button.CircularToggle
+                android:id="@+id/choice_a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A"/>
+
+            <com.nex3z.togglebuttongroup.button.CircularToggle
+                android:id="@+id/choice_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="B"/>
+            <com.nex3z.togglebuttongroup.button.CircularToggle
+                android:id="@+id/choice_c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="C"/>
+            <com.nex3z.togglebuttongroup.button.CircularToggle
+                android:id="@+id/choice_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="D"/>
+
+        </com.nex3z.togglebuttongroup.SingleSelectToggleGroup>-->
     </LinearLayout>
 
 </LinearLayout>
