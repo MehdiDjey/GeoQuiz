@@ -7,6 +7,7 @@
     android:background="@color/myBack"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:padding="10dp"
     tools:context=".MainActivity">
 
     <TextView
@@ -30,12 +31,48 @@
         app:lottie_autoPlay="true"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+       android:paddingTop="20dp"
+        android:gravity="center"
+        android:paddingBottom="20dp"
         android:orientation="horizontal">
 
-        <Button
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Geo questions"
+            app:bootstrapBrand="primary"
+            android:layout_weight="1"
+            app:bootstrapSize="xl"
+            app:buttonMode="regular"
+            app:showOutline="true"
+            android:layout_margin="5dp"
+            app:roundedCorners="true"
+            android:onClick="goToQuestions"
+            />
+
+
+
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Map location"
+            android:layout_weight="1"
+            app:bootstrapBrand="primary"
+            app:bootstrapSize="xl"
+            android:layout_margin="5dp"
+            app:buttonMode="regular"
+            app:roundedCorners="true"
+            android:onClick="gotToMap"
+            app:showOutline="true"
+
+            />
+
+
+
+      <!--  <Button
             android:id="@+id/btn_question"
             android:layout_width="118dp"
             android:layout_height="114dp"
@@ -49,12 +86,24 @@
             android:layout_height="114dp"
             android:background="@drawable/icons8"
             android:onClick="gotToMap"
-            tools:ignore="ButtonStyle" />
+            tools:ignore="ButtonStyle" />-->
     </LinearLayout>
-    <Button
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+        app:bootstrapBrand="danger"
+        app:bootstrapSize="xl"
+        app:buttonMode="regular"
+        app:showOutline="true"
+        android:onClick="toExit"
+        app:roundedCorners="true"
+        />
+<!--    <Button
         android:id="@+id/btn_exit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="toExit"
-        android:background="@drawable/icons82" />
+        android:background="@drawable/icons82" />-->
 </LinearLayout>

@@ -10,7 +10,58 @@
     android:padding="20dp"
     tools:context=".QuestionActivity">
 
-    <Button
+
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/intro_lottie_animation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:lottie_fileName="animation1.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"/>
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="START"
+        app:bootstrapBrand="primary"
+        app:bootstrapSize="xl"
+        android:layout_margin="10dp"
+        app:buttonMode="regular"
+        app:showOutline="false"
+        app:roundedCorners="true"
+        android:onClick="toStart"
+        />
+
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HIGHG SCORE"
+        app:bootstrapBrand="success"
+        app:bootstrapSize="xl"
+        android:layout_margin="10dp"
+        app:buttonMode="regular"
+        app:showOutline="false"
+        app:roundedCorners="true"
+        android:onClick="goToHighScore"
+        />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EXIT"
+        app:bootstrapBrand="danger"
+        app:bootstrapSize="xl"
+        android:layout_margin="10dp"
+        app:buttonMode="regular"
+        app:showOutline="false"
+        app:roundedCorners="true"
+        android:onClick="toExit"
+        />
+
+   <!-- <Button
         android:id="@+id/btn_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,5 +84,5 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@drawable/icons86"
-        android:onClick="toExit" />
+        android:onClick="toExit" />-->
 </LinearLayout>

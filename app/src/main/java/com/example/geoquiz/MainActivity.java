@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     DataBaseHelper dbHelper;
     SQLiteDatabase sqliteDB;
 
-    LottieAnimationView mLottie;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
